@@ -1,0 +1,16 @@
+{
+  "name": "analytics",
+  "version": "0.0.1",
+  "description": "Simple tool to track and analyze application events",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "analytics",
+    "events",
+    "tracking"
+  ],
+  "author": "alexander.beletsky@gmail.com",
+  "license": "MIT"
+}
