@@ -4,7 +4,8 @@
   "description": "Simple tool to track and analyze application events",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "watch": "nodemon --watch source --watch config source/server.js"
   },
   "keywords": [
     "analytics",
@@ -15,6 +16,8 @@
   "license": "MIT",
   "dependencies": {
     "express": "~3.4.0",
-    "request": "~2.27.0"
+    "request": "~2.27.0",
+    "colors": "~0.6.2",
+    "moment": "~2.2.1"
   }
 }

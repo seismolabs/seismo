@@ -120,11 +120,6 @@ events.query({id: 'app-start', date: '2014-09-26'}, function (err, results) {
 });
 ```
 
-## Dependencies
-
-* Express.js
-* Request.js
-
 ## License
 
 MIT
