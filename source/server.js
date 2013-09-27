@@ -55,6 +55,13 @@ app.post('/api/events/:app', function (req, res) {
 app.get('/api/events/:app', function (req, res) {
 	var app = req.params.app;
 
+	ensureCollection(app, function (err, doc) {
+		if (err) {
+			return res.send(500, 'failed to connect to db');
+		}
+
+		res.json(doc.events);
+	});
 });
 
 function ensureCollection(app, callback) {
