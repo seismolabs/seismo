@@ -12,24 +12,6 @@ app.configure(function(){
 	app.use(app.router);
 });
 
-app.configure('development', function() {
-	app.use(express.logger('dev'));
-});
-
-app.configure('test', function() {
-	app.use(express.errorHandler());
-});
-
-app.configure('staging', function() {
-	app.use(express.logger('short'));
-	app.use(express.compress());
-});
-
-app.configure('production', function() {
-	app.use(express.logger('short'));
-	app.use(express.compress());
-});
-
 app.post('/api/events/:app', function (req, res) {
 	var app = req.params.app;
 	var data = req.body;
