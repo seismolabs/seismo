@@ -1,10 +1,10 @@
 # Analytics
 
-Simple tool to track and analyze application events
+Simple tool to track and analyze application events.
 
 ## Description
 
-In essence, this is client-server app. Client is sending event to server, depending on what actually happing in application. Server persists all data provides API to access it.
+In essence, this is client-server app. Client is sending series of events to server. Server persists all data and provides API to access it.
 
 This repo contains both server and client (node.js) code. Clients for other platforms are welcome.
 
@@ -119,6 +119,11 @@ events.query({id: 'app-start', date: '2014-09-26'}, function (err, results) {
 	console.log(results);
 });
 ```
+
+## Dependencies
+
+* Express.js
+* Request.js
 
 ## License
 
