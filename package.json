@@ -12,5 +12,9 @@
     "tracking"
   ],
   "author": "alexander.beletsky@gmail.com",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "express": "~3.4.0",
+    "request": "~2.27.0"
+  }
 }
