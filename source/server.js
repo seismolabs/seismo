@@ -30,6 +30,47 @@ app.configure('production', function() {
 	app.use(express.compress());
 });
 
+app.post('/api/events/:app', function (req, res) {
+	var app = req.params.app;
+	var data = req.body;
+
+	ensureCollection(app, function (err, doc) {
+		if (err) {
+			return res.send(500, 'failed to connect to db');
+		}
+
+		var timestampt = moment().toDate();
+		var record = {data: data, timestampt: timestampt};
+
+		db.events.update({_id: doc._id}, {$push: {events: record}}, function (err, doc) {
+			if (err) {
+				return res.send(500, 'failed to store incoming event');
+			}
+
+			res.send(201);
+		});
+	});
+});
+
+app.get('/api/events/:app', function (req, res) {
+	var app = req.params.app;
+
+});
+
+function ensureCollection(app, callback) {
+	db.analytics.findOne({application: app}, function (err, doc) {
+		if (err) {
+			return callback (err);
+		}
+
+		if (!doc) {
+			return createApplication(app, callback);
+		}
+
+		callback(null, doc);
+	});
+}
+
 http.createServer(app).listen(app.get('port'), function() {
 	var env = process.env.NODE_ENV || 'development';
 	logger.info('analytics app listening on port ' + app.get('port') + ' ' + env + ' mongo: ' + config.connection);
