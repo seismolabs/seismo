@@ -4,7 +4,7 @@ var client = require('../../source/client');
 describe('analytics.spec.js', function () {
 	var app, events, error, response;
 
-	beforeEach(function () {
+	before(function () {
 		app = 'test-app-' + moment().valueOf();
 	});
 
@@ -26,6 +26,20 @@ describe('analytics.spec.js', function () {
 		describe('with only event name', function () {
 			beforeEach(function (done) {
 				events('my first event', function (err, resp) {
+					error = err;
+					response = resp;
+					done(err);
+				});
+			});
+
+			it('should be posted', function () {
+				expect(error).to.not.be.ok;
+			});
+		});
+
+		describe('with id and event name', function () {
+			beforeEach(function (done) {
+				events({id: 'first-event', event: 'my first event'}, function (err, resp) {
 					error = err;
 					response = resp;
 					done(err);

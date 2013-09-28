@@ -18,11 +18,11 @@ app.configure(function(){
 
 app.post('/api/events/:app', function (req, res) {
 	var app = req.params.app;
-	var eventName = req.body.event;
+	var event = req.body.event;
 
 	var timestampt = moment().toDate();
-	var id = createEventId(eventName);
-	var record = {id: id, app: app, event: {name: eventName}, timestampt: timestampt};
+	var id = createEventId(event);
+	var record = {id: id, app: app, event: event, timestampt: timestampt};
 
 	db.events.save(record, function (err, doc) {
 		if (err) {
@@ -33,7 +33,21 @@ app.post('/api/events/:app', function (req, res) {
 	});
 });
 
-function createEventId(eventName) {
+function createEventId(event) {
+	var eventName;
+
+	if (typeof event === 'object' && event.id) {
+		return event.id;
+	}
+
+	if (typeof event === 'string') {
+		eventName = event;
+	}
+
+	if (typeof event === 'object') {
+		eventName = event.name;
+	}
+
 	return eventName.toLowerCase().replace(' ', '-');
 }
 
