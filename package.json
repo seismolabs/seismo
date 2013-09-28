@@ -4,7 +4,7 @@
   "description": "Simple tool to track and analyze application events",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "node runMocha",
     "watch": "nodemon --watch source --watch config source/server.js"
   },
   "keywords": [
