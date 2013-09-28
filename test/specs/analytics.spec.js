@@ -170,7 +170,17 @@ describe('analytics.spec.js', function () {
 		});
 
 		describe('by event name', function () {
+			before(function (done) {
+				events.query('application started', function (err, res) {
+					error = err;
+					results = res;
+					done(err);
+				});
+			});
 
+			it('should return all events by given name', function () {
+				expect(results.length).to.equal(5);
+			});
 		});
 
 		describe('by event id', function () {

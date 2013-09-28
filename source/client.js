@@ -29,7 +29,11 @@ module.exports = function (app, server) {
 	client.query = function(query, callback) {
 		if (typeof query === 'function') {
 			callback = query;
+		} else {
+			url += createQuery(query);
 		}
+
+
 
 		request.get({url: url, json: true}, function (err, resp) {
 			if (err) {
@@ -42,6 +46,12 @@ module.exports = function (app, server) {
 
 			callback(null, resp.body);
 		});
+
+		function createQuery(q) {
+			if (typeof q === 'string') {
+				return '?event=' + q;
+			}
+		}
 	};
 
 	return client;

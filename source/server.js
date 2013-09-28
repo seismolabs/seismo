@@ -43,8 +43,14 @@ app.post('/api/events/:app', function (req, res) {
 
 app.get('/api/events/:app', function (req, res) {
 	var app = req.params.app;
+	var event = req.query.event;
+	var query = {app: app};
 
-	db.events.find({app: app}).toArray(function (err, results) {
+	if (event) {
+		query.event = event;
+	}
+
+	db.events.find(query).toArray(function (err, results) {
 		if (err) {
 			return res.send(500, 'failed to read events');
 		}
