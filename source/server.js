@@ -20,35 +20,33 @@ app.post('/api/events/:app', function (req, res) {
 	var app = req.params.app;
 	var event = req.body.event;
 
-	var timestampt = moment().toDate();
-	var id = createEventId(event);
-	var record = {id: id, app: app, event: event, timestampt: timestampt};
+	var parsed = parseEvent(event);
+	if (!parsed) {
+		return res.send(400, 'bad event format');
+	}
 
+	var record = {id: parsed.id, app: app, event: parsed.event, timestampt: moment().toDate()};
 	db.events.save(record, function (err, doc) {
 		if (err) {
 			return res.send(500, 'failed to store incoming event');
 		}
 
-		res.send(201);
+		res.json(201, doc);
 	});
 });
 
-function createEventId(event) {
-	var eventName;
-
-	if (typeof event === 'object' && event.id) {
-		return event.id;
-	}
-
+function parseEvent(event) {
 	if (typeof event === 'string') {
-		eventName = event;
+		var id = event.toLowerCase().replace(/\s/g, '-');
+		return {
+			id: id,
+			event: event
+		};
 	}
 
 	if (typeof event === 'object') {
-		eventName = event.name;
+		return event;
 	}
-
-	return eventName.toLowerCase().replace(' ', '-');
 }
 
 // app.get('/api/events/:app', function (req, res) {

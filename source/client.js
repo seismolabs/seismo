@@ -9,16 +9,7 @@ module.exports = function (app, server) {
 	var url = server + '/api/events/' + app;
 
 	var client = function client(event, callback) {
-		var payload = {};
-		if (typeof event === 'string') {
-			payload.event = event;
-		}
-
-		if (typeof event === 'object') {
-			payload = event;
-		}
-
-		request.post({url: url, body: event, json: true}, function (err, resp) {
+		request.post({url: url, body: {event: event}, json: true}, function (err, resp) {
 			if (err) {
 				return callback({message: 'error occured during event posting', err: err});
 			}

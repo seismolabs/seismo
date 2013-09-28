@@ -35,11 +35,23 @@ describe('analytics.spec.js', function () {
 			it('should be posted', function () {
 				expect(error).to.not.be.ok;
 			});
+
+			it('should have id', function () {
+				expect(response.id).to.equal('my-first-event');
+			});
+
+			it('should have event', function () {
+				expect(response.event).to.equal('my first event');
+			});
+
+			it('should have timestampt', function () {
+				expect(response.timestampt).to.be.ok;
+			});
 		});
 
 		describe('with id and event name', function () {
 			beforeEach(function (done) {
-				events({id: 'first-event', event: 'my first event'}, function (err, resp) {
+				events({id: 'second-event', event: 'my second event'}, function (err, resp) {
 					error = err;
 					response = resp;
 					done(err);
@@ -48,6 +60,18 @@ describe('analytics.spec.js', function () {
 
 			it('should be posted', function () {
 				expect(error).to.not.be.ok;
+			});
+
+			it('should have id', function () {
+				expect(response.id).to.equal('second-event');
+			});
+
+			it('should have event', function () {
+				expect(response.event).to.equal('my second event');
+			});
+
+			it('should have timestampt', function () {
+				expect(response.timestampt).to.be.ok;
 			});
 		});
 	});
