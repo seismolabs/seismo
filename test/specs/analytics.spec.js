@@ -183,8 +183,18 @@ describe('analytics.spec.js', function () {
 			});
 		});
 
-		describe('by event id', function () {
+		describe.only('by event id', function () {
+			before(function (done) {
+				events.query({id: 'app-stopped'}, function (err, res) {
+					error = err;
+					results = res;
+					done(err);
+				});
+			});
 
+			it('should return all events by given id', function () {
+				expect(results.length).to.equal(5);
+			});
 		});
 
 		describe('by date', function () {

@@ -6,9 +6,10 @@ module.exports = function (app, server) {
 	}
 
 	server = server || 'http://localhost:3005';
-	var url = server + '/api/events/' + app;
 
 	var client = function client(event, data, callback) {
+		var url = server + '/api/events/' + app;
+
 		if (typeof data === 'function') {
 			callback = data;
 		}
@@ -27,13 +28,13 @@ module.exports = function (app, server) {
 	};
 
 	client.query = function(query, callback) {
+		var url = server + '/api/events/' + app;
+
 		if (typeof query === 'function') {
 			callback = query;
 		} else {
 			url += createQuery(query);
 		}
-
-
 
 		request.get({url: url, json: true}, function (err, resp) {
 			if (err) {
@@ -50,6 +51,10 @@ module.exports = function (app, server) {
 		function createQuery(q) {
 			if (typeof q === 'string') {
 				return '?event=' + q;
+			}
+
+			if (typeof q === 'object' && q.id) {
+				return '?id=' + q.id;
 			}
 		}
 	};

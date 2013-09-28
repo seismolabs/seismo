@@ -44,10 +44,15 @@ app.post('/api/events/:app', function (req, res) {
 app.get('/api/events/:app', function (req, res) {
 	var app = req.params.app;
 	var event = req.query.event;
+	var id = req.query.id;
 	var query = {app: app};
 
 	if (event) {
 		query.event = event;
+	}
+
+	if (id) {
+		query.id = id;
 	}
 
 	db.events.find(query).toArray(function (err, results) {
