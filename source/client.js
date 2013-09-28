@@ -56,6 +56,10 @@ module.exports = function (app, server) {
 			if (typeof q === 'object' && q.id) {
 				return '?id=' + q.id;
 			}
+
+			if (typeof q === 'object' && q.date) {
+				return '?date=' + q.date;
+			}
 		}
 	};
 

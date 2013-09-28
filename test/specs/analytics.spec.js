@@ -165,7 +165,7 @@ describe('analytics.spec.js', function () {
 			});
 
 			it('should return all events for app', function () {
-				expect(results.length).to.equal(12);
+				expect(results.length).to.equal(13);
 			});
 		});
 
@@ -198,11 +198,31 @@ describe('analytics.spec.js', function () {
 		});
 
 		describe('by date', function () {
+			before(function (done) {
+				events.query({date: '2013-01-28'}, function (err, res) {
+					error = err;
+					results = res;
+					done(err);
+				});
+			});
 
+			it('should return all events by given date', function () {
+				expect(results.length).to.equal(2);
+			});
 		});
 
 		describe('by today', function () {
+			before(function (done) {
+				events.query({date: 'today'}, function (err, res) {
+					error = err;
+					results = res;
+					done(err);
+				});
+			});
 
+			it('should return all events by today', function () {
+				expect(results.length).to.equal(3);
+			});
 		});
 
 		describe('by name and date', function () {

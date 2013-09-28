@@ -1,6 +1,5 @@
 var express = require('express');
 var http = require('http');
-var util = require('util');
 
 var logger = require('./utils/logger');
 var config = require('../config');
@@ -43,16 +42,18 @@ app.post('/api/events/:app', function (req, res) {
 
 app.get('/api/events/:app', function (req, res) {
 	var app = req.params.app;
-	var event = req.query.event;
-	var id = req.query.id;
 	var query = {app: app};
 
-	if (event) {
-		query.event = event;
+	if (req.query.event) {
+		query.event = req.query.event;
 	}
 
-	if (id) {
-		query.id = id;
+	if (req.query.id) {
+		query.id = req.query.id;
+	}
+
+	if (req.query.date) {
+		query.timestampt = req.query.date === 'today' ? dateQuery() : dateQuery(req.query.date);
 	}
 
 	db.events.find(query).toArray(function (err, results) {
@@ -62,6 +63,22 @@ app.get('/api/events/:app', function (req, res) {
 
 		res.json(results);
 	});
+
+	function dateQuery(date) {
+		var from = date ? moment(date) : moment();
+
+		from.set('hour', 0);
+		from.set('minute', 0);
+		from.set('second', 0);
+
+		var to = moment(from);
+		to.add('days', 1);
+
+		return {
+			$gte: from.toDate(),
+			$lte: to.toDate()
+		};
+	}
 });
 
 function parseEvent(event) {
