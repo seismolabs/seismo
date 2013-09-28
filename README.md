@@ -81,17 +81,17 @@ var analytics = require('analytics');
 var events = analytics('my-web-app');
 
 // query all collected events
-events.query(function (err, res, results) {
+events.query(function (err, results) {
 	console.log(results);
 })
 
 // query by event name
-events.query('search executed', function (err, res, results) {
+events.query('search executed', function (err, results) {
 	console.log(results);
 });
 
 // query by event type
-events.query({id: 'app-start'}, function (err, res, results) {
+events.query({id: 'app-start'}, function (err, results) {
 	console.log(results);
 });
 ```

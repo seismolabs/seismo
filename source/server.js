@@ -41,6 +41,18 @@ app.post('/api/events/:app', function (req, res) {
 	});
 });
 
+app.get('/api/events/:app', function (req, res) {
+	var app = req.params.app;
+
+	db.events.find({app: app}).toArray(function (err, results) {
+		if (err) {
+			return res.send(500, 'failed to read events');
+		}
+
+		res.json(results);
+	});
+});
+
 function parseEvent(event) {
 	if (typeof event === 'string') {
 		return {
@@ -58,18 +70,6 @@ function parseEvent(event) {
 function generateIdFromName(name) {
 	return name.toLowerCase().replace(/\s/g, '-');
 }
-
-// app.get('/api/events/:app', function (req, res) {
-// 	var app = req.params.app;
-
-// 	ensureCollection(app, function (err, doc) {
-// 		if (err) {
-// 			return res.send(500, 'failed to connect to db');
-// 		}
-
-// 		res.json(doc.events);
-// 	});
-// });
 
 // function ensureCollection(app, callback) {
 // 	db.analytics.findOne({application: app}, function (err, doc) {

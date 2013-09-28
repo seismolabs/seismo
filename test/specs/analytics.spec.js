@@ -1,5 +1,6 @@
 var moment = require('moment');
 var client = require('../../source/client');
+var testUtils = require('../utils');
 
 describe('analytics.spec.js', function () {
 	var app, events, error, response;
@@ -19,7 +20,7 @@ describe('analytics.spec.js', function () {
 			app = 'test-posting-app-' + moment().valueOf();
 		});
 
-		beforeEach(function () {
+		before(function () {
 			events = client(app);
 		});
 
@@ -139,17 +140,33 @@ describe('analytics.spec.js', function () {
 		});
 	});
 
-	describe('quering events', function () {
+	describe.only('quering events', function () {
+		var results;
+
 		before(function () {
 			app = 'test-quering-app-' + moment().valueOf();
 		});
 
+		before(function (done) {
+			testUtils.createQueringData(app, done);
+		});
+
 		before(function () {
-			// create test data
+			events = client(app);
 		});
 
 		describe('all events', function () {
+			before(function (done) {
+				events.query(function (err, res) {
+					error = err;
+					results = res;
+					done(err);
+				});
+			});
 
+			it('should return all events for app', function () {
+				expect(results.length).to.equal(12);
+			});
 		});
 
 		describe('by event name', function () {

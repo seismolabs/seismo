@@ -27,6 +27,10 @@ module.exports = function (app, server) {
 	};
 
 	client.query = function(query, callback) {
+		if (typeof query === 'function') {
+			callback = query;
+		}
+
 		request.get({url: url, json: true}, function (err, resp) {
 			if (err) {
 				return callback({message: 'error occured during getting events', err: err});
