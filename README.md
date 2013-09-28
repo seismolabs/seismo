@@ -25,7 +25,10 @@ events('application started');
 events({id: 'app-start', event: 'application started'});
 
 // provide additional payload (optional, but usefull for sophisticated analysis)
-events('application stated', {id: 'app-start', environment: process.env.NODE_ENV});
+events('application stated', {environment: process.env.NODE_ENV});
+
+// or ..
+events({id: 'app-start', event: 'application started'}, {environment: process.env.NODE_ENV});
 
 // provide callback (optional)
 events('application started', function (err) {

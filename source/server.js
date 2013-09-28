@@ -18,7 +18,9 @@ app.configure(function(){
 
 app.post('/api/events/:app', function (req, res) {
 	var app = req.params.app;
-	var event = req.body.event;
+	var payload = req.body;
+	var event = payload.event;
+	var data = payload.data;
 
 	var parsed = parseEvent(event);
 	if (!parsed) {
@@ -26,6 +28,10 @@ app.post('/api/events/:app', function (req, res) {
 	}
 
 	var record = {id: parsed.id, app: app, event: parsed.event, timestampt: moment().toDate()};
+	if (data) {
+		record.data = data;
+	}
+
 	db.events.save(record, function (err, doc) {
 		if (err) {
 			return res.send(500, 'failed to store incoming event');
@@ -37,16 +43,20 @@ app.post('/api/events/:app', function (req, res) {
 
 function parseEvent(event) {
 	if (typeof event === 'string') {
-		var id = event.toLowerCase().replace(/\s/g, '-');
 		return {
-			id: id,
+			id: generateIdFromName(event),
 			event: event
 		};
 	}
 
 	if (typeof event === 'object') {
+		event.id = event.id || generateIdFromName(event.event);
 		return event;
 	}
+}
+
+function generateIdFromName(name) {
+	return name.toLowerCase().replace(/\s/g, '-');
 }
 
 // app.get('/api/events/:app', function (req, res) {
