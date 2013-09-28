@@ -1,7 +1,11 @@
 var express = require('express');
 var http = require('http');
+var util = require('util');
+
 var logger = require('./utils/logger');
 var config = require('../config');
+var moment = require('moment');
+var db = require('./db');
 
 var app = express();
 
@@ -14,51 +18,50 @@ app.configure(function(){
 
 app.post('/api/events/:app', function (req, res) {
 	var app = req.params.app;
-	var data = req.body;
+	var eventName = req.body.event;
 
-	ensureCollection(app, function (err, doc) {
+	var timestampt = moment().toDate();
+	var id = createEventId(eventName);
+	var record = {id: id, app: app, event: {name: eventName}, timestampt: timestampt};
+
+	db.events.save(record, function (err, doc) {
 		if (err) {
-			return res.send(500, 'failed to connect to db');
+			return res.send(500, 'failed to store incoming event');
 		}
 
-		var timestampt = moment().toDate();
-		var record = {data: data, timestampt: timestampt};
-
-		db.events.update({_id: doc._id}, {$push: {events: record}}, function (err, doc) {
-			if (err) {
-				return res.send(500, 'failed to store incoming event');
-			}
-
-			res.send(201);
-		});
+		res.send(201);
 	});
 });
 
-app.get('/api/events/:app', function (req, res) {
-	var app = req.params.app;
-
-	ensureCollection(app, function (err, doc) {
-		if (err) {
-			return res.send(500, 'failed to connect to db');
-		}
-
-		res.json(doc.events);
-	});
-});
-
-function ensureCollection(app, callback) {
-	db.analytics.findOne({application: app}, function (err, doc) {
-		if (err) {
-			return callback (err);
-		}
-
-		if (!doc) {
-			return createApplication(app, callback);
-		}
-
-		callback(null, doc);
-	});
+function createEventId(eventName) {
+	return eventName.toLowerCase().replace(' ', '-');
 }
+
+// app.get('/api/events/:app', function (req, res) {
+// 	var app = req.params.app;
+
+// 	ensureCollection(app, function (err, doc) {
+// 		if (err) {
+// 			return res.send(500, 'failed to connect to db');
+// 		}
+
+// 		res.json(doc.events);
+// 	});
+// });
+
+// function ensureCollection(app, callback) {
+// 	db.analytics.findOne({application: app}, function (err, doc) {
+// 		if (err) {
+// 			return callback (err);
+// 		}
+
+// 		if (!doc) {
+// 			return createApplication(app, callback);
+// 		}
+
+// 		callback(null, doc);
+// 	});
+// }
 
 http.createServer(app).listen(app.get('port'), function() {
 	var env = process.env.NODE_ENV || 'development';

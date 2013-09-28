@@ -1,7 +1,6 @@
 var util = require('util');
-var colors = require('colors');
 var moment = require('moment');
-var stub = require('./stub');
+// var stub = require('./stub');
 
 var logger = {
 	success: function (message) {
@@ -36,4 +35,4 @@ var logger = {
 };
 
 var env = process.env.NODE_ENV || 'development';
-module.exports = env === 'test' ? stub(logger) : logger;
+module.exports = env === 'test' ? logger : logger;
