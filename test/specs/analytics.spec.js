@@ -4,13 +4,9 @@ var client = require('../../source/client');
 describe('analytics.spec.js', function () {
 	var app, events, error, response;
 
-	before(function () {
-		app = 'test-app-' + moment().valueOf();
-	});
-
 	describe('create client', function () {
 		beforeEach(function () {
-			events = client(app);
+			events = client('simple-client-app');
 		});
 
 		it('should be initialized', function () {
@@ -18,7 +14,11 @@ describe('analytics.spec.js', function () {
 		});
 	});
 
-	describe('posting and quering events', function () {
+	describe('posting events', function () {
+		before(function () {
+			app = 'test-posting-app-' + moment().valueOf();
+		});
+
 		beforeEach(function () {
 			events = client(app);
 		});
@@ -136,6 +136,44 @@ describe('analytics.spec.js', function () {
 			it('should have timestampt', function () {
 				expect(response.timestampt).to.be.ok;
 			});
+		});
+	});
+
+	describe('quering events', function () {
+		before(function () {
+			app = 'test-quering-app-' + moment().valueOf();
+		});
+
+		before(function () {
+			// create test data
+		});
+
+		describe('all events', function () {
+
+		});
+
+		describe('by event name', function () {
+
+		});
+
+		describe('by event id', function () {
+
+		});
+
+		describe('by date', function () {
+
+		});
+
+		describe('by today', function () {
+
+		});
+
+		describe('by name and date', function () {
+
+		});
+
+		describe('by id and date', function () {
+
 		});
 	});
 });
