@@ -99,20 +99,6 @@ function generateIdFromName(name) {
 	return name.toLowerCase().replace(/\s/g, '-');
 }
 
-// function ensureCollection(app, callback) {
-// 	db.analytics.findOne({application: app}, function (err, doc) {
-// 		if (err) {
-// 			return callback (err);
-// 		}
-
-// 		if (!doc) {
-// 			return createApplication(app, callback);
-// 		}
-
-// 		callback(null, doc);
-// 	});
-// }
-
 http.createServer(app).listen(app.get('port'), function() {
 	var env = process.env.NODE_ENV || 'development';
 	logger.info('analytics app listening on port ' + app.get('port') + ' ' + env + ' mongo: ' + config.connection);

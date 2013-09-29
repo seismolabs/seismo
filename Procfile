@@ -1,0 +1,1 @@
+web: bin/node source/server.js
