@@ -140,7 +140,7 @@ describe('analytics.spec.js', function () {
 		});
 	});
 
-	describe.only('quering events', function () {
+	describe('quering events', function () {
 		var results;
 
 		before(function () {
@@ -183,7 +183,7 @@ describe('analytics.spec.js', function () {
 			});
 		});
 
-		describe.only('by event id', function () {
+		describe('by event id', function () {
 			before(function (done) {
 				events.query({id: 'app-stopped'}, function (err, res) {
 					error = err;
@@ -252,5 +252,9 @@ describe('analytics.spec.js', function () {
 				expect(results.length).to.equal(1);
 			});
 		});
+	});
+
+	describe('building reports', function () {
+		// TBD...
 	});
 });

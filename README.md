@@ -123,6 +123,43 @@ events.query({id: 'app-start', date: '2014-09-26'}, function (err, results) {
 });
 ```
 
+### Reports
+
+In order, to build dashboard application, there are number of ready to use reports.
+
+```js
+// report all events by hour
+events.report({event: 'application started', report: 'hour', date: '2013-09-29', hour: 6}, function (err, summary) {
+	console.log(summary);
+});
+
+// report all events by day
+events.report({event: 'application started', report: 'day', date: '2013-09-29'}, function (err, summary) {
+	console.log(summary);
+});
+
+// report all events by week
+events.report({event: 'application started', report: 'week', week: 32}, function (err, summary) {
+	console.log(summary);
+});
+
+// report all events by period
+events.report({event: 'application started', report: 'period', from: '2013-09-10', to: '2013-09-13'}, function (err, summary) {
+	console.log(summary);
+});
+
+```
+
+Summary object contains totals,
+
+```js
+{
+	id: 'app-started',
+	event: 'application started',
+	total: 224
+}
+```
+
 ## License
 
 MIT
