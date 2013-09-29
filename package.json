@@ -2,7 +2,7 @@
   "name": "analytics",
   "version": "0.0.1",
   "description": "Simple tool to track and analyze application events",
-  "main": "index.js",
+  "main": "source/client.js",
   "scripts": {
     "test": "node runMocha",
     "watch": "nodemon --watch source --watch config source/server.js"
