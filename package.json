@@ -19,7 +19,8 @@
     "request": "~2.27.0",
     "colors": "~0.6.2",
     "moment": "~2.2.1",
-    "mongojs": "~0.9.6"
+    "mongojs": "~0.9.6",
+    "node-logentries": "~0.1.2"
   },
   "devDependencies": {
     "mocha": "~1.13.0",

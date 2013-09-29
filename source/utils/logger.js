@@ -1,6 +1,7 @@
 var util = require('util');
 var moment = require('moment');
 var stub = require('./stub');
+var logentries = require('./logentries');
 
 var logger = {
 	success: function (message) {
@@ -34,5 +35,15 @@ var logger = {
 
 };
 
-var env = process.env.NODE_ENV || 'development';
-module.exports = env === 'test' ? stub(logger) : logger;
+module.exports = (function () {
+	var env = process.env.NODE_ENV || 'development';
+	if (env === 'test') {
+		return stub(logger);
+	}
+
+	if (env === 'production' || env === 'staging') {
+		return logentries(logger);
+	}
+
+	return logger;
+})();
