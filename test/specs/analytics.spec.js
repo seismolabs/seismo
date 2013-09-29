@@ -226,11 +226,31 @@ describe('analytics.spec.js', function () {
 		});
 
 		describe('by name and date', function () {
+			before(function (done) {
+				events.query({event: 'application started', date: '2013-01-25'}, function (err, res) {
+					error = err;
+					results = res;
+					done(err);
+				});
+			});
 
+			it('should return all events by date and event name', function () {
+				expect(results.length).to.equal(1);
+			});
 		});
 
 		describe('by id and date', function () {
+			before(function (done) {
+				events.query({id: 'app-started', date: '2013-01-25'}, function (err, res) {
+					error = err;
+					results = res;
+					done(err);
+				});
+			});
 
+			it('should return all events by date and event name', function () {
+				expect(results.length).to.equal(1);
+			});
 		});
 	});
 });

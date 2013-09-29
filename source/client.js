@@ -53,8 +53,16 @@ module.exports = function (app, server) {
 				return '?event=' + q;
 			}
 
+			if (typeof q === 'object' && q.id && q.date) {
+				return '?id=' + q.id + '&date=' + q.date;
+			}
+
 			if (typeof q === 'object' && q.id) {
 				return '?id=' + q.id;
+			}
+
+			if (typeof q === 'object' && q.date && q.event) {
+				return '?date=' + q.date + '&event=' + q.event;
 			}
 
 			if (typeof q === 'object' && q.date) {

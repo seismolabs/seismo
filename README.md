@@ -113,7 +113,7 @@ events.query({date: '2014-09-26'}, function (err, results) {
 });
 
 // query all collected events for particular, for event name
-events.query('search executed', {date: '2014-09-26'}, function (err, results) {
+events.query({event: 'search executed', date: '2014-09-26'}, function (err, results) {
 	console.log(results);
 });
 
