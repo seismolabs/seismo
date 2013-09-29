@@ -4,6 +4,8 @@ function stub(obj) {
 			obj[key] = function () {};
 		}
 	});
+
+	return obj;
 }
 
 module.exports = stub;

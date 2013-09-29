@@ -11,6 +11,8 @@ function stub(obj) {
 		original.call(obj, type, message);
 		logentriesLogger.log(type, message);
 	};
+
+	return obj;
 }
 
 module.exports = stub;
