@@ -1,7 +1,7 @@
 {
   "name": "analytics",
   "version": "0.0.1",
-  "deploy": "1",
+  "deploy": "2",
   "description": "Simple tool to track and analyze application events",
   "main": "source/client.js",
   "scripts": {
