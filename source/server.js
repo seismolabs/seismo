@@ -28,6 +28,7 @@ app.post('/api/events/:app', function (req, res) {
 
 	var parsed = parseEvent(event);
 	if (!parsed) {
+		logger.error({message: 'failed to parse event information'});
 		return res.send(400, 'bad event format');
 	}
 
@@ -38,8 +39,11 @@ app.post('/api/events/:app', function (req, res) {
 
 	db.events.save(record, function (err, doc) {
 		if (err) {
+			logger.error({message: 'failed to store incoming event', err: err});
 			return res.send(500, 'failed to store incoming event');
 		}
+
+		logger.info('recieved event from app: ' + app + ' event name: ' + parsed.event);
 
 		res.json(201, doc);
 	});
@@ -63,8 +67,11 @@ app.get('/api/events/:app', function (req, res) {
 
 	db.events.find(query).toArray(function (err, results) {
 		if (err) {
+			logger.error({message: 'failed to read events', err: err});
 			return res.send(500, 'failed to read events');
 		}
+
+		logger.info('returned events for app: ' + app + ' event name: ' + query.event || query.id);
 
 		res.json(results);
 	});
