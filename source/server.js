@@ -5,6 +5,7 @@ var logger = require('./utils/logger');
 var config = require('../config');
 var moment = require('moment');
 var db = require('./db');
+var package = require('../package');
 
 var app = express();
 
@@ -13,6 +14,10 @@ app.configure(function(){
 	app.use(express.bodyParser());
 	app.use(express.methodOverride());
 	app.use(app.router);
+});
+
+app.get('/', function (req, res) {
+	res.json({app: 'analytics', version: package.version, apiUrl: '/api'});
 });
 
 app.post('/api/events/:app', function (req, res) {
