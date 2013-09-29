@@ -17,7 +17,7 @@ app.configure(function(){
 });
 
 app.get('/', function (req, res) {
-	res.json({app: 'analytics', version: package.version, apiUrl: '/api'});
+	res.json({app: 'analytics', env: process.env.NODE_ENV, version: package.version, apiUrl: '/api'});
 });
 
 app.post('/api/events/:app', function (req, res) {
