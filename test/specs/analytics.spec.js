@@ -255,6 +255,81 @@ describe('analytics.spec.js', function () {
 	});
 
 	describe('building reports', function () {
-		// TBD...
+		var summary;
+
+		before(function () {
+			app = 'test-reporting-app-' + moment().valueOf();
+		});
+
+		before(function (done) {
+			testUtils.createReportingData(app, done);
+		});
+
+		before(function () {
+			events = client(app);
+		});
+
+		describe('report by hour', function () {
+			before(function (done) {
+				events.report({event: 'application started', report: 'hour', date: '2013-09-29', hour: 6}, function (err, sum) {
+					error = err;
+					summary = sum;
+					done(err);
+				});
+			});
+
+			it('should have event data', function () {
+				expect(summary.id).to.equal('app-started');
+				expect(summary.event).to.equal('application started');
+			});
+
+			it('should have total', function () {
+				expect(summary.total).to.equal(3);
+			});
+		});
+
+/*
+		describe('report by day', function () {
+			before(function (done) {
+				events.report({event: 'application started', report: 'day', day: '2013-09-29'}, function (err, sum) {
+					error = err;
+					summary = sum;
+					done(err);
+				});
+			});
+
+			it('should create summary', function () {
+
+			});
+		});
+
+		describe('report by week', function () {
+			before(function (done) {
+				events.report({event: 'application started', report: 'week', week: 10}, function (err, sum) {
+					error = err;
+					summary = sum;
+					done(err);
+				});
+			});
+
+			it('should create summary', function () {
+
+			});
+		});
+
+		describe('report by period', function () {
+			before(function (done) {
+				events.report({event: 'application started', report: 'period', from: '2013-09-29', to: '2013-09-30'}, function (err, sum) {
+					error = err;
+					summary = sum;
+					done(err);
+				});
+			});
+
+			it('should create summary', function () {
+
+			});
+		});
+*/
 	});
 });

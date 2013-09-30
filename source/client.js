@@ -71,5 +71,32 @@ module.exports = function (app, server) {
 		}
 	};
 
+	client.report = function(query, callback) {
+		if (!query.report) {
+			return callback('missing report option');
+		}
+
+		var url = server + '/api/report/' + app;
+		url += createQuery(query);
+
+		console.log(url);
+
+		request.get({url: url, json: true}, function (err, resp) {
+			if (err) {
+				return callback({message: 'error occured during getting events', err: err});
+			}
+
+			if (resp.statusCode !== 200) {
+				return callback({message: 'server error', code: resp.statusCode});
+			}
+
+			callback(null, resp.body);
+		});
+
+		function createQuery(query) {
+			return '?' + query.report + '=' + query[query.report];
+		}
+	};
+
 	return client;
 };

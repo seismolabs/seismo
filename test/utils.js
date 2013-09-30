@@ -27,6 +27,26 @@ function createQueringData(app, callback) {
 	async.series(saveEventsTasks, callback);
 }
 
+function createReportingData(app, callback) {
+	var events = [
+		{id: 'app-started', app: app, event: 'application started', timestampt: new Date('2013-01-25 05:12:30')},
+		{id: 'app-started', app: app, event: 'application started', timestampt: new Date('2013-01-25 05:45:00')},
+		{id: 'app-started', app: app, event: 'application started', timestampt: new Date('2013-01-25 06:00:00')},
+		{id: 'app-started', app: app, event: 'application started', timestampt: new Date('2013-01-25 06:15:10')},
+		{id: 'app-started', app: app, event: 'application started', timestampt: new Date('2013-01-25 06:55:50')},
+		{id: 'app-started', app: app, event: 'application started', timestampt: new Date('2013-01-25 07:00:21')},
+	];
+
+	var saveEventsTasks = events.map(function (e) {
+		return function (callback) {
+			db.events.save(e, callback);
+		};
+	});
+
+	async.series(saveEventsTasks, callback);
+}
+
 module.exports = {
-	createQueringData: createQueringData
+	createQueringData: createQueringData,
+	createReportingData: createReportingData
 };
