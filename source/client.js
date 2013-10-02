@@ -76,10 +76,8 @@ module.exports = function (app, server) {
 			return callback('missing report option');
 		}
 
-		var url = server + '/api/report/' + app;
+		var url = server + '/api/reports/' + query.report + '/' + app;
 		url += createQuery(query);
-
-		console.log(url);
 
 		request.get({url: url, json: true}, function (err, resp) {
 			if (err) {
@@ -94,7 +92,9 @@ module.exports = function (app, server) {
 		});
 
 		function createQuery(query) {
-			return '?' + query.report + '=' + query[query.report];
+			if (query.report === 'hour') {
+				return '?hour=' + query.hour + '&date=' + query.date;
+			}
 		}
 	};
 

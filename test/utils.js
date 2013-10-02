@@ -1,5 +1,6 @@
 var async = require('async');
 var db = require('../source/db');
+var moment = require('moment');
 
 function createQueringData(app, callback) {
 	var events = [
@@ -29,12 +30,12 @@ function createQueringData(app, callback) {
 
 function createReportingData(app, callback) {
 	var events = [
-		{id: 'app-started', app: app, event: 'application started', timestampt: new Date('2013-01-25 05:12:30')},
-		{id: 'app-started', app: app, event: 'application started', timestampt: new Date('2013-01-25 05:45:00')},
-		{id: 'app-started', app: app, event: 'application started', timestampt: new Date('2013-01-25 06:00:00')},
-		{id: 'app-started', app: app, event: 'application started', timestampt: new Date('2013-01-25 06:15:10')},
-		{id: 'app-started', app: app, event: 'application started', timestampt: new Date('2013-01-25 06:55:50')},
-		{id: 'app-started', app: app, event: 'application started', timestampt: new Date('2013-01-25 07:00:21')},
+		{id: 'app-started', app: app, event: 'application started', timestampt: moment.utc('2013-09-29 05:12:30').toDate()},
+		{id: 'app-started', app: app, event: 'application started', timestampt: moment.utc('2013-09-29 05:45:00').toDate()},
+		{id: 'app-started', app: app, event: 'application started', timestampt: moment.utc('2013-09-29 06:00:00').toDate()},
+		{id: 'app-started', app: app, event: 'application started', timestampt: moment.utc('2013-09-29 06:15:10').toDate()},
+		{id: 'app-started', app: app, event: 'application started', timestampt: moment.utc('2013-09-29 06:55:50').toDate()},
+		{id: 'app-started', app: app, event: 'application started', timestampt: moment.utc('2013-09-29 07:00:21').toDate()},
 	];
 
 	var saveEventsTasks = events.map(function (e) {

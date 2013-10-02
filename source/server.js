@@ -16,9 +16,13 @@ app.configure(function(){
 	app.use(app.router);
 });
 
+// Healthcheck
+
 app.get('/', function (req, res) {
 	res.json({app: 'analytics', env: process.env.NODE_ENV, version: package.version, apiUrl: '/api'});
 });
+
+// Events
 
 app.post('/api/events/:app', function (req, res) {
 	var app = req.params.app;
@@ -32,7 +36,7 @@ app.post('/api/events/:app', function (req, res) {
 		return res.send(400, 'bad event format');
 	}
 
-	var record = {id: parsed.id, app: app, event: parsed.event, timestampt: moment().toDate()};
+	var record = {id: parsed.id, app: app, event: parsed.event, timestampt: moment().utc().toDate()};
 	if (data) {
 		record.data = data;
 	}
@@ -87,10 +91,58 @@ app.get('/api/events/:app', function (req, res) {
 		to.add('days', 1);
 
 		return {
-			$gte: from.toDate(),
-			$lte: to.toDate()
+			$gte: from.utc().toDate(),
+			$lt: to.utc().toDate()
 		};
 	}
+});
+
+// Reports
+
+app.get('/api/reports/hour/:app', function (req, res) {
+	var app = req.params.app;
+	var query = {app: app};
+	var date = req.query.date;
+	var hour = req.query.hour;
+
+	if (!hour) {
+		return res.send(403, 'missing hour parameter');
+	}
+
+	if (req.query.event) {
+		query.event = req.query.event;
+	}
+
+	if (req.query.id) {
+		query.id = req.query.id;
+	}
+
+	var from = moment.utc(date);
+
+	from.set('hour', hour);
+	from.set('minute', 0);
+	from.set('second', 0);
+
+	var to = moment.utc(from);
+	to.add('hours', 1);
+
+	query.timestampt = {$gte: from.toDate() , $lt: to.toDate()};
+
+	db.events.find(query).toArray(function (err, results) {
+		if (err) {
+			logger.error({message: 'failed to read events', err: err});
+			return res.send(500, 'failed to read events');
+		}
+
+		logger.info('returned events for app: ' + app + ' event name: ' + query.event || query.id);
+		var report = {
+			id: results[0].id,
+			event: results[0].event,
+			total: results.length
+		};
+
+		res.json(report);
+	});
 });
 
 function parseEvent(event) {
