@@ -307,21 +307,26 @@ describe('analytics.spec.js', function () {
 			});
 		});
 
-/*
 		describe('report by week', function () {
 			before(function (done) {
-				events.report({event: 'application started', report: 'week', week: 10}, function (err, sum) {
+				events.report({event: 'application started', report: 'week', date: '2013-09-29'}, function (err, sum) {
 					error = err;
 					summary = sum;
 					done(err);
 				});
 			});
 
-			it('should create summary', function () {
+			it('should have event data', function () {
+				expect(summary.id).to.equal('app-started');
+				expect(summary.event).to.equal('application started');
+			});
 
+			it('should have total', function () {
+				expect(summary.total).to.equal(6);
 			});
 		});
 
+/*
 		describe('report by period', function () {
 			before(function (done) {
 				events.report({event: 'application started', report: 'period', from: '2013-09-29', to: '2013-09-30'}, function (err, sum) {

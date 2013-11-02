@@ -36,6 +36,20 @@ function createReportingData(app, callback) {
 		{id: 'app-started', app: app, event: 'application started', timestampt: moment.utc('2013-09-29 06:15:10').toDate()},
 		{id: 'app-started', app: app, event: 'application started', timestampt: moment.utc('2013-09-29 06:55:50').toDate()},
 		{id: 'app-started', app: app, event: 'application started', timestampt: moment.utc('2013-09-29 07:00:21').toDate()},
+
+		{id: 'app-started', app: app, event: 'application started', timestampt: moment.utc('2013-09-30 05:12:30').toDate()},
+		{id: 'app-started', app: app, event: 'application started', timestampt: moment.utc('2013-09-30 05:45:00').toDate()},
+		{id: 'app-started', app: app, event: 'application started', timestampt: moment.utc('2013-09-30 06:00:00').toDate()},
+		{id: 'app-started', app: app, event: 'application started', timestampt: moment.utc('2013-09-30 06:15:09').toDate()},
+		{id: 'app-started', app: app, event: 'application started', timestampt: moment.utc('2013-09-30 06:55:50').toDate()},
+		{id: 'app-started', app: app, event: 'application started', timestampt: moment.utc('2013-09-30 07:00:21').toDate()},
+
+		{id: 'app-started', app: app, event: 'application started', timestampt: moment.utc('2013-09-31 05:12:30').toDate()},
+		{id: 'app-started', app: app, event: 'application started', timestampt: moment.utc('2013-09-31 05:45:00').toDate()},
+		{id: 'app-started', app: app, event: 'application started', timestampt: moment.utc('2013-09-31 06:00:00').toDate()},
+		{id: 'app-started', app: app, event: 'application started', timestampt: moment.utc('2013-09-31 06:15:09').toDate()},
+		{id: 'app-started', app: app, event: 'application started', timestampt: moment.utc('2013-09-31 06:55:50').toDate()},
+		{id: 'app-started', app: app, event: 'application started', timestampt: moment.utc('2013-09-31 07:00:21').toDate()},
 	];
 
 	var saveEventsTasks = events.map(function (e) {
