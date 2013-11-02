@@ -130,20 +130,11 @@ app.get('/api/reports/hour/:app', function (req, res) {
 	var to = moment.utc(from);
 	to.add('hours', 1);
 
-	query.timestampt = {$gte: from.toDate() , $lt: to.toDate()};
-
-	db.events.find(query).toArray(function (err, results) {
+	report(from, to, query, function (err, report) {
 		if (err) {
-			logger.error({message: 'failed to read events', err: err});
-			return res.send(500, 'failed to read events');
+			logger.error(err);
+			res.send(500, err);
 		}
-
-		logger.info('returned events for app: ' + app + ' event name: ' + query.event || query.id);
-		var report = {
-			id: results[0].id,
-			event: results[0].event,
-			total: results.length
-		};
 
 		res.json(report);
 	});
@@ -183,8 +174,73 @@ app.get('/api/reports/day/:app', function (req, res) {
 
 		res.json(report);
 	});
-
 });
+
+app.get('/api/reports/week/:app', function (req, res) {
+	var app = req.params.app;
+	var query = {app: app};
+	var date = req.query.date;
+
+	if (!date) {
+		return res.send(403, 'missing hour parameter');
+	}
+
+	if (req.query.event) {
+		query.event = req.query.event;
+	}
+
+	if (req.query.id) {
+		query.id = req.query.id;
+	}
+
+	var from = moment.utc(date), to = moment.utc(date);
+	from.startOf('week');
+	to.endOf('week');
+
+	report(from, to, query, function (err, report) {
+		if (err) {
+			logger.error(err);
+			res.send(500, err);
+		}
+
+		res.json(report);
+	});
+});
+
+app.get('/api/reports/period/:app', function (req, res) {
+	var app = req.params.app;
+	var query = {app: app};
+	var from = req.query.from;
+	var to = req.query.to;
+
+	if (!from) {
+		return res.send(403, 'missing from parameter');
+	}
+
+	if (!to) {
+		return res.send(403, 'missing to parameter');
+	}
+
+	if (req.query.event) {
+		query.event = req.query.event;
+	}
+
+	if (req.query.id) {
+		query.id = req.query.id;
+	}
+
+	from = moment.utc(from), to = moment.utc(to).add('days', 1);
+
+	report(from, to, query, function (err, report) {
+		if (err) {
+			logger.error(err);
+			res.send(500, err);
+		}
+
+		res.json(report);
+	});
+});
+
 
 function report(from, to, query, callback) {
 	query.timestampt = {$gte: from.toDate() , $lt: to.toDate()};

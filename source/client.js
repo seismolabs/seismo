@@ -99,6 +99,14 @@ module.exports = function (app, server) {
 			if (query.report === 'day') {
 				return '?date=' + query.date;
 			}
+
+			if (query.report === 'week') {
+				return '?date=' + query.date;
+			}
+
+			if (query.report === 'period') {
+				return '?from=' + query.from + '&to=' + query.to;
+			}
 		}
 	};
 
