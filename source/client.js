@@ -95,6 +95,10 @@ module.exports = function (app, server) {
 			if (query.report === 'hour') {
 				return '?hour=' + query.hour + '&date=' + query.date;
 			}
+
+			if (query.report === 'day') {
+				return '?date=' + query.date;
+			}
 		}
 	};
 

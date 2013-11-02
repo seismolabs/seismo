@@ -105,6 +105,10 @@ app.get('/api/reports/hour/:app', function (req, res) {
 	var date = req.query.date;
 	var hour = req.query.hour;
 
+	if (!date) {
+		return res.send(403, 'missing date parameter');
+	}
+
 	if (!hour) {
 		return res.send(403, 'missing hour parameter');
 	}
@@ -144,6 +148,61 @@ app.get('/api/reports/hour/:app', function (req, res) {
 		res.json(report);
 	});
 });
+
+app.get('/api/reports/day/:app', function (req, res) {
+	var app = req.params.app;
+	var query = {app: app};
+	var date = req.query.date;
+
+	if (!date) {
+		return res.send(403, 'missing hour parameter');
+	}
+
+	if (req.query.event) {
+		query.event = req.query.event;
+	}
+
+	if (req.query.id) {
+		query.id = req.query.id;
+	}
+
+	var from = moment.utc(date);
+
+	from.set('hour', 0);
+	from.set('minute', 0);
+	from.set('second', 0);
+
+	var to = moment.utc(from);
+	to.add('days', 1);
+
+	report(from, to, query, function (err, report) {
+		if (err) {
+			logger.error(err);
+			res.send(500, err);
+		}
+
+		res.json(report);
+	});
+
+});
+
+function report(from, to, query, callback) {
+	query.timestampt = {$gte: from.toDate() , $lt: to.toDate()};
+
+	db.events.find(query).toArray(function (err, results) {
+		if (err) {
+			return callback({message: 'failed to read events', err: err});
+		}
+
+		var report = {
+			id: results[0].id,
+			event: results[0].event,
+			total: results.length
+		};
+
+		callback(null, report);
+	});
+}
 
 function parseEvent(event) {
 	if (typeof event === 'string') {
