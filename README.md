@@ -20,6 +20,7 @@ var events = analytics('my-web-app');
 
 // call function, with the name of event
 events('application started');
+```
 
 ```plain
 HTTP POST http://analytics.host/api/events/:app-id
@@ -30,8 +31,10 @@ HTTP POST http://analytics.host/api/events/:app-id
 }
 ```
 
+```js
 // provide event id (optional, but suitable for fetching data)
 events({id: 'app-start', event: 'application started'});
+```
 
 ```plain
 HTTP POST http://analytics.host/api/events/:app-id
@@ -42,8 +45,10 @@ HTTP POST http://analytics.host/api/events/:app-id
 }
 ```
 
+```js
 // provide additional payload (optional, but usefull for sophisticated analysis)
 events('application stated', {environment: process.env.NODE_ENV});
+```
 
 ```plain
 HTTP POST http://analytics.host/api/events/:app-id
@@ -54,6 +59,7 @@ HTTP POST http://analytics.host/api/events/:app-id
 }
 ```
 
+```js
 // or ..
 events({id: 'app-start', event: 'application started'}, {environment: process.env.NODE_ENV});
 
@@ -111,20 +117,24 @@ var events = analytics('my-web-app');
 events.query(function (err, results) {
 	console.log(results);
 });
+```
 
 ```plain
 HTTP GET http://analytics.host/api/events/:app-id
 ```
 
+```js
 // query by event name
 events.query('search executed', function (err, results) {
 	console.log(results);
 });
+```
 
 ```plain
 HTTP GET http://analytics.host/api/events/:app-id?event=search%20executed
 ```
 
+```js
 // query by event type
 events.query({id: 'app-start'}, function (err, results) {
 	console.log(results);
@@ -145,29 +155,35 @@ var events = analytics('my-web-app');
 events.query({date: 'today'}, function (err, results) {
 	console.log(results);
 });
+```
 
 ```plain
 HTTP GET http://analytics.host/api/events/:app-id?date=today
 ```
 
+```js
 // query all collected events for particular day
 events.query({date: '2014-09-26'}, function (err, results) {
 	console.log(results);
 });
+```
 
 ```plain
 HTTP GET http://analytics.host/api/events/:app-id?date=2014-09-26
 ```
 
+```js
 // query all collected events for particular, for event name
 events.query({event: 'search executed', date: '2014-09-26'}, function (err, results) {
 	console.log(results);
 });
+```
 
 ```plain
 HTTP GET http://analytics.host/api/events/:app-id?event=search%20executed&date=today
 ```
 
+```js
 // query all collected events for particular, for event type
 events.query({id: 'app-start', date: '2014-09-26'}, function (err, results) {
 	console.log(results);
@@ -187,34 +203,39 @@ In order, to build dashboard application, there are number of ready to use repor
 events.report({event: 'application started', report: 'hour', date: '2013-09-29', hour: 6}, function (err, summary) {
 	console.log(summary);
 });
+```
 
 ```plain
 HTTP GET http://analytics.host/api/reports/hour/:app-id?hour=6&date=2013-09-29
 ```
 
+```js
 // report all events by day
 events.report({event: 'application started', report: 'day', date: '2013-09-29'}, function (err, summary) {
 	console.log(summary);
 });
+```
 
 ```plain
 HTTP GET http://analytics.host/api/reports/day/:app-id?date=2013-09-29
 ```
 
+```js
 // report all events by week
 events.report({event: 'application started', report: 'week', date: '2013-09-29'}, function (err, summary) {
 	console.log(summary);
 });
+```
 
 ```plain
 HTTP GET http://analytics.host/api/reports/week/:app-id?week=2013-09-29
 ```
 
+```js
 // report all events by period
 events.report({event: 'application started', report: 'period', from: '2013-09-10', to: '2013-09-13'}, function (err, summary) {
 	console.log(summary);
 });
-
 ```
 
 ```plain
