@@ -9,9 +9,18 @@ var package = require('../package');
 
 var app = express();
 
+var cors = function (req, res, next) {
+	res.header('Access-Control-Allow-Origin', '*');
+	res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+	res.header('Access-Control-Allow-Headers', 'X-Requested-With, X-Token, X-Revision, Content-Type');
+
+	next();
+};
+
 app.configure(function(){
 	app.set('port', process.env.PORT || 3005);
 	app.use(express.bodyParser());
+	app.use(cors);
 	app.use(express.methodOverride());
 	app.use(app.router);
 });
@@ -247,15 +256,21 @@ app.get('/api/reports/period/:app', function (req, res) {
 function report(from, to, query, callback) {
 	query.timestampt = {$gte: from.toDate() , $lt: to.toDate()};
 
+	logger.info({message: 'prepearing report', query: query});
+
 	db.events.find(query).toArray(function (err, results) {
-		if (err) {
+		if (err || !results) {
 			return callback({message: 'failed to read events', err: err});
 		}
 
-		var report = {
-			id: results[0].id,
-			event: results[0].event,
-			total: results.length
+		var total = results.length;
+		var id = total > 0 ? results[0].id : query.id;
+		var event = total > 0 ? results[0].event : query.event;
+
+		var report =  {
+			id: id,
+			event: event,
+			total: total
 		};
 
 		callback(null, report);
