@@ -121,7 +121,7 @@ app.get('/api/reports/hour/:app', function (req, res) {
 		query.id = req.query.id;
 	}
 
-	var from = moment.utc(date);
+	var from = date === 'today' ? moment.utc() : moment.utc(date);
 
 	from.set('hour', hour);
 	from.set('minute', 0);
@@ -157,7 +157,7 @@ app.get('/api/reports/day/:app', function (req, res) {
 		query.id = req.query.id;
 	}
 
-	var from = moment.utc(date);
+	var from = date === 'today' ? moment.utc() : moment.utc(date);
 
 	from.set('hour', 0);
 	from.set('minute', 0);
@@ -193,7 +193,9 @@ app.get('/api/reports/week/:app', function (req, res) {
 		query.id = req.query.id;
 	}
 
-	var from = moment.utc(date), to = moment.utc(date);
+	var from = date === 'today' ? moment.utc() : moment.utc(date);
+	var to = moment.utc(date);
+
 	from.startOf('week');
 	to.endOf('week');
 
