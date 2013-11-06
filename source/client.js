@@ -104,6 +104,10 @@ module.exports = function (app, server) {
 				return '?date=' + query.date;
 			}
 
+			if (query.report === 'month') {
+				return '?date=' + query.date;
+			}
+
 			if (query.report === 'period') {
 				return '?from=' + query.from + '&to=' + query.to;
 			}

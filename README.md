@@ -232,6 +232,17 @@ HTTP GET http://analytics.host/api/reports/week/:app-id?week=2013-09-29
 ```
 
 ```js
+// report all events by month
+events.report({event: 'application started', report: 'month', date: '2013-09-29'}, function (err, summary) {
+	console.log(summary);
+});
+```
+
+```plain
+HTTP GET http://analytics.host/api/reports/month/:app-id?week=2013-09-29
+```
+
+```js
 // report all events by period
 events.report({event: 'application started', report: 'period', from: '2013-09-10', to: '2013-09-13'}, function (err, summary) {
 	console.log(summary);

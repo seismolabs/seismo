@@ -218,6 +218,39 @@ app.get('/api/reports/week/:app', function (req, res) {
 	});
 });
 
+app.get('/api/reports/month/:app', function (req, res) {
+	var app = req.params.app;
+	var query = {app: app};
+	var date = req.query.date;
+
+	if (!date) {
+		return res.send(403, 'missing hour parameter');
+	}
+
+	if (req.query.event) {
+		query.event = req.query.event;
+	}
+
+	if (req.query.id) {
+		query.id = req.query.id;
+	}
+
+	var from = date === 'today' ? moment.utc() : moment.utc(date);
+	var to = moment.utc(date);
+
+	from.startOf('month');
+	to.endOf('month');
+
+	report(from, to, query, function (err, report) {
+		if (err) {
+			logger.error(err);
+			res.send(500, err);
+		}
+
+		res.json(report);
+	});
+});
+
 app.get('/api/reports/period/:app', function (req, res) {
 	var app = req.params.app;
 	var query = {app: app};
