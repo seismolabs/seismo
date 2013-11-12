@@ -7,6 +7,7 @@ var moment = require('moment');
 var db = require('./db');
 var package = require('../package');
 var request = require('request');
+var crypto = require('crypto');
 
 var app = express();
 
@@ -51,7 +52,7 @@ app.post('/auth', function (req, res) {
 			res.send(401, {message: 'authorization token belongs to another user'});
 		}
 
-		res.send(200, {token: JSON.stringify(user)});
+		res.send(200, {token: createToken(username)});
 	});
 });
 
@@ -352,9 +353,40 @@ function generateIdFromName(name) {
 	return name.toLowerCase().replace(/\s/g, '-');
 }
 
-function base64(string) {
-	return new Buffer(string).toString('base64');
+function createToken(username) {
+	var timespamp = moment();
+	var message = username + ';' + timespamp.valueOf();
+	var hmac = crypto.createHmac('sha1', config.authKey).update(message).digest('hex');
+	var token = username + ';' + timespamp.valueOf() + ';' + hmac;
+	var tokenBase64 = new Buffer(token).toString('base64');
+
+	return tokenBase64;
 }
+
+function validateToken (token) {
+	var decoded = new Buffer(token, 'base64').toString();
+	var parsed = decoded.split(';');
+
+	if (parsed.length !== 3) {
+		return false;
+	}
+
+	var username = parsed[0], timespamp = parsed[1], recievedHmac = parsed[2];
+	var message = username + ';' + timespamp;
+	var computedHmac = crypto.createHmac('sha1', config.authKey).update(message).digest('hex');
+
+	if (recievedHmac !== computedHmac) {
+		return false;
+	}
+
+	var currentTimespamp = moment(), recievedTimespamp = moment(+timespamp);
+	if (recievedTimespamp.diff(currentTimespamp, 'minutes') > TOKEN_TTL_MINUTES) {
+		return false;
+	}
+
+	return true;
+}
+
 
 http.createServer(app).listen(app.get('port'), function() {
 	var env = process.env.NODE_ENV || 'development';

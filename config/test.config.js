@@ -3,6 +3,10 @@ var config = {
 
 	applicationUrl: 'http://localhost:3005',
 
+	authKey: 'ffbac26ce2b99cfc3c60a7eb911a108d4823ba1a',
+
+	tokenTtl: 60,
+
 	logentries: {
 		token: null
 	}
