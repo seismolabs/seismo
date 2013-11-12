@@ -1,6 +1,8 @@
 var config = {
 	connection: 'mongodb://localhost:27017/analyticsdb',
 
+	applicationUrl: 'http://localhost:3005',
+
 	logentries: {
 		token: null
 	}

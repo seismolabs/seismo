@@ -1,6 +1,11 @@
 var async = require('async');
 var db = require('../source/db');
 var moment = require('moment');
+var config = require('../config');
+
+function getRootUrl () {
+	return config.applicationUrl;
+}
 
 function createQueringData(app, callback) {
 	var events = [
@@ -62,6 +67,7 @@ function createReportingData(app, callback) {
 }
 
 module.exports = {
+	getRootUrl: getRootUrl,
 	createQueringData: createQueringData,
 	createReportingData: createReportingData
 };

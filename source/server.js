@@ -6,6 +6,7 @@ var config = require('../config');
 var moment = require('moment');
 var db = require('./db');
 var package = require('../package');
+var request = require('request');
 
 var app = express();
 
@@ -29,6 +30,29 @@ app.configure(function(){
 
 app.get('/', function (req, res) {
 	res.json({app: 'analytics', env: process.env.NODE_ENV, version: package.version, apiUrl: '/api'});
+});
+
+// Auth
+
+app.post('/auth', function (req, res) {
+	var username = req.body.username;
+	var token = req.body.token;
+
+	request('https://api.github.com/user', { auth: { username: token, password: 'x-oauth-basic'}, json: true}, function (err, response, user) {
+		if (err) {
+			res.send(500, err);
+		}
+
+		if (response.statusCode !== 200 || !user) {
+			res.send(401, {message: 'github authorization failed', statusCode: response.statusCode});
+		}
+
+		if (user.login !== username) {
+			res.send(401, {message: 'authorization token belongs to another user'});
+		}
+
+		res.send(200, {token: JSON.stringify(user)});
+	});
 });
 
 // Events
@@ -326,6 +350,10 @@ function parseEvent(event) {
 
 function generateIdFromName(name) {
 	return name.toLowerCase().replace(/\s/g, '-');
+}
+
+function base64(string) {
+	return new Buffer(string).toString('base64');
 }
 
 http.createServer(app).listen(app.get('port'), function() {
