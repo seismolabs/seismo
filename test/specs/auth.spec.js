@@ -59,7 +59,6 @@ describe('auth.spec.js', function () {
 			it ('should get access token', function () {
 				expect(body.token).to.be.ok;
 			});
-
 		});
 	});
 });

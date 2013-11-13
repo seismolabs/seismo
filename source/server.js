@@ -41,18 +41,21 @@ app.post('/auth', function (req, res) {
 
 	request('https://api.github.com/user', { auth: { username: token, password: 'x-oauth-basic'}, json: true}, function (err, response, user) {
 		if (err) {
-			res.send(500, err);
+			return res.send(500, err);
 		}
 
 		if (response.statusCode !== 200 || !user) {
-			res.send(401, {message: 'github authorization failed', statusCode: response.statusCode});
+			return res.send(401, {message: 'github authorization failed', statusCode: response.statusCode});
 		}
 
 		if (user.login !== username) {
-			res.send(401, {message: 'authorization token belongs to another user'});
+			return res.send(401, {message: 'authorization token belongs to another user'});
 		}
 
-		res.send(200, {token: createToken(username)});
+		var accessToken = createToken(username);
+
+		res.cookie('token', accessToken, {expires: new Date(Date.now() + config.tokenTtl * 60 * 1000 )});
+		res.send(200, {token: accessToken});
 	});
 });
 
@@ -380,7 +383,7 @@ function validateToken (token) {
 	}
 
 	var currentTimespamp = moment(), recievedTimespamp = moment(+timespamp);
-	if (recievedTimespamp.diff(currentTimespamp, 'minutes') > TOKEN_TTL_MINUTES) {
+	if (recievedTimespamp.diff(currentTimespamp, 'minutes') > config.tokenTtl) {
 		return false;
 	}
 
