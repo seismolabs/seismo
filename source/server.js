@@ -1,6 +1,7 @@
 var express = require('express');
 var http = require('http');
 
+var _ = require('underscore');
 var logger = require('./utils/logger');
 var config = require('../config');
 var moment = require('moment');
@@ -22,6 +23,7 @@ var cors = function (req, res, next) {
 app.configure(function(){
 	app.set('port', process.env.PORT || 3005);
 	app.use(express.bodyParser());
+	app.use(express.cookieParser());
 	app.use(cors);
 	app.use(express.methodOverride());
 	app.use(app.router);
@@ -367,6 +369,10 @@ function createToken(username) {
 }
 
 function validateToken (token) {
+	if (!token) {
+		return false;
+	}
+
 	var decoded = new Buffer(token, 'base64').toString();
 	var parsed = decoded.split(';');
 
@@ -390,6 +396,37 @@ function validateToken (token) {
 	return true;
 }
 
+function authenticatedAccess () {
+	return function (req, res, next) {
+		var token = req.headers['x-access-token'] || req.query.access_token || req.cookies.token;
+
+		validateToken(token) ? next() : res.send(401);
+	};
+}
+
+function applyAuthentication(app, routesToSecure) {
+	for (var verb in app.routes) {
+		var routes = app.routes[verb];
+		routes.forEach(patchRoute);
+	}
+
+	function patchRoute (route) {
+		var apply = _.any(routesToSecure, function (r) {
+			return route.path.indexOf(r) === 0;
+		});
+
+		var guestAccess = _.any(route.callbacks, function (r) {
+			return r.name === '_guest';
+		});
+
+		if (apply && !guestAccess) {
+			route.callbacks.splice(0, 0, authenticatedAccess());
+		}
+	}
+}
+
+
+applyAuthentication(app, ['/api']);
 
 http.createServer(app).listen(app.get('port'), function() {
 	var env = process.env.NODE_ENV || 'development';

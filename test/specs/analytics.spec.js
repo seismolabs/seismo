@@ -3,11 +3,20 @@ var client = require('../../source/client');
 var testUtils = require('../utils');
 
 describe('analytics.spec.js', function () {
-	var app, events, error, response;
+	var app, events, error, response, options;
+
+	before(function () {
+		options = {
+			credentials: {
+				username: 'alexanderbeletsky',
+				token: 'ebf6140a6314d7508a02300961636e9feffa73da'
+			}
+		};
+	});
 
 	describe('create client', function () {
 		beforeEach(function () {
-			events = client('simple-client-app');
+			events = client('simple-client-app', options);
 		});
 
 		it('should be initialized', function () {
@@ -21,7 +30,7 @@ describe('analytics.spec.js', function () {
 		});
 
 		before(function () {
-			events = client(app);
+			events = client(app, options);
 		});
 
 		describe('with only event name', function () {
@@ -29,6 +38,7 @@ describe('analytics.spec.js', function () {
 				events('my first event', function (err, resp) {
 					error = err;
 					response = resp;
+					console.log(err);
 					done(err);
 				});
 			});
@@ -152,7 +162,7 @@ describe('analytics.spec.js', function () {
 		});
 
 		before(function () {
-			events = client(app);
+			events = client(app, options);
 		});
 
 		describe('all events', function () {
@@ -266,7 +276,7 @@ describe('analytics.spec.js', function () {
 		});
 
 		before(function () {
-			events = client(app);
+			events = client(app, options);
 		});
 
 		describe('report by hour', function () {

@@ -1,11 +1,44 @@
 var request = require('request');
 
-module.exports = function (app, server) {
+module.exports = function (app, options) {
 	if (!app) {
 		throw 'application id is required';
 	}
 
-	server = server || 'http://localhost:3005';
+	var server = (options && options.server) || 'http://localhost:3005';
+	var credentials = options.credentials;
+
+	if (!credentials) {
+		throw new Error('options object missing service credentials');
+	}
+
+	var accessToken;
+
+	function auth(credentials, callback) {
+		request.post({url: server + '/auth', body: credentials, json: true}, function (err, response) {
+			if (err) {
+				return callback(err);
+			}
+
+			callback(null, response.body.token);
+		});
+	}
+
+	function ensureAccessToken(callback) {
+		if (!accessToken) {
+			return auth(credentials, function (err, token) {
+				if (err) {
+					return callback(err);
+				}
+
+				accessToken = token;
+
+				return callback(null, token);
+			});
+		}
+
+		callback(null, accessToken);
+	}
 
 	var client = function client(event, data, callback) {
 		var url = server + '/api/events/' + app;
@@ -14,16 +47,22 @@ module.exports = function (app, server) {
 			callback = data;
 		}
 
-		request.post({url: url, body: {event: event, data: data}, json: true}, function (err, resp) {
+		ensureAccessToken(function (err, token) {
 			if (err) {
-				return callback({message: 'error occured during event posting', err: err});
+				return callback(err);
 			}
 
-			if (resp.statusCode !== 201) {
-				return callback({message: 'server error', code: resp.statusCode, err: resp.body});
-			}
+			request.post({url: url, body: {event: event, data: data}, headers: {'X-Access-Token': token}, json: true}, function (err, resp) {
+				if (err) {
+					return callback({message: 'error occured during event posting', err: err});
+				}
 
-			callback(null, resp.body);
+				if (resp.statusCode !== 201) {
+					return callback({message: 'server error', code: resp.statusCode, err: resp.body});
+				}
+
+				callback(null, resp.body);
+			});
 		});
 	};
 
@@ -36,16 +75,22 @@ module.exports = function (app, server) {
 			url += createQuery(query);
 		}
 
-		request.get({url: url, json: true}, function (err, resp) {
+		ensureAccessToken(function (err, token) {
 			if (err) {
-				return callback({message: 'error occured during getting events', err: err});
+				return callback(err);
 			}
 
-			if (resp.statusCode !== 200) {
-				return callback({message: 'server error', code: resp.statusCode});
-			}
+			request.get({url: url, headers: {'X-Access-Token': token}, json: true}, function (err, resp) {
+				if (err) {
+					return callback({message: 'error occured during getting events', err: err});
+				}
 
-			callback(null, resp.body);
+				if (resp.statusCode !== 200) {
+					return callback({message: 'server error', code: resp.statusCode});
+				}
+
+				callback(null, resp.body);
+			});
 		});
 
 		function createQuery(q) {
@@ -79,16 +124,22 @@ module.exports = function (app, server) {
 		var url = server + '/api/reports/' + query.report + '/' + app;
 		url += createQuery(query);
 
-		request.get({url: url, json: true}, function (err, resp) {
+		ensureAccessToken(function (err, token) {
 			if (err) {
-				return callback({message: 'error occured during getting events', err: err});
+				return callback(err);
 			}
 
-			if (resp.statusCode !== 200) {
-				return callback({message: 'server error', code: resp.statusCode});
-			}
+			request.get({url: url, headers: {'X-Access-Token': token}, json: true}, function (err, resp) {
+				if (err) {
+					return callback({message: 'error occured during getting events', err: err});
+				}
 
-			callback(null, resp.body);
+				if (resp.statusCode !== 200) {
+					return callback({message: 'server error', code: resp.statusCode});
+				}
+
+				callback(null, resp.body);
+			});
 		});
 
 		function createQuery(query) {
