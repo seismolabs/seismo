@@ -49,7 +49,7 @@ app.post('/auth', function (req, res) {
 			return res.send(401, {message: 'github authorization failed', statusCode: response.statusCode});
 		}
 
-		var accessToken = createToken(JSON.stringify(user));
+		var accessToken = createToken(user.login);
 
 		res.cookie('token', accessToken, {expires: new Date(Date.now() + config.tokenTtl * 60 * 1000 )});
 		res.send(200, {token: accessToken});
