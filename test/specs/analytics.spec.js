@@ -8,7 +8,6 @@ describe('analytics.spec.js', function () {
 	before(function () {
 		options = {
 			credentials: {
-				username: 'alexanderbeletsky',
 				token: 'ebf6140a6314d7508a02300961636e9feffa73da'
 			}
 		};

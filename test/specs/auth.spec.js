@@ -39,7 +39,6 @@ describe('auth.spec.js', function () {
 		describe('with right credentials', function () {
 			beforeEach(function () {
 				credentials = {
-					username: 'alexanderbeletsky',
 					token: 'ebf6140a6314d7508a02300961636e9feffa73da'
 				};
 			});
