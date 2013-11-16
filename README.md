@@ -1,26 +1,70 @@
-# Analytics
+# Seismo
 
-Simple tool to track and analyze application events.
+Simple tool to track and analyze application events. Ideal for startups.
 
 ## Description
 
-In essence, this is client-server app. Client is sending series of events to server. Server persists all data and provides API to access it.
+It should be easy to start collecting application events in order to understand what's going on inside, user activity and performance issues. We solve that by logging application events to some storage and when build reports based on this data.
 
-This repo contains both server and client (node.js) code. Clients for other platforms are welcome.
+There are few solutions that allows to do that. But you might decided to track on your own, fully controlling the flow and also make a solution cheap. Thats there **Seismo** will help.
 
-### Create client and post events
+### Simple architecture
 
-This is a small example of `analytics` usage:
+It's build upon open source technology and it's open-source by itself. Simple deploy and infrastructure around will give you able to not dive upon in details, but simply use it.
+
+MongoDB is used as server database, there events are stored. Express.js application exposes REST API, there you post events and build reports on.
+
+### Docker friendly
+
+Server is easy deployable on any Node.js-friendly system. But to make deployment event more simple, we provide Docker image and all you need to do after just run we bash commands to start.
+
+### Clients
+
+The clients are also part of project. Just for now we have Express.js/Node.js client, but will support client apps, Ruby, Python and different combinations of languages and frameworks. Since the clients are simple HTTP applications, it's really easy to extend the support.
+
+## REST API
+
+Here is the description of **Seismo** REST interface.
+
+### Authentication
+
+Clients have to authenticated in order to access API. We used simple authentication flow, based on GitHub. Authenticated users are generating [Personal Tokens](https://help.github.com/articles/creating-an-access-token-for-command-line-use).
+
+There is a configuration file, there you specify GitHub accounts that are permitted to access API.
 
 ```js
-var analytics = require('analytics');
 
-// create analytics client, by providing app id
-var events = analytics('my-web-app');
+// config.js
 
-// call function, with the name of event
-events('application started');
+var config = {
+	auth: {
+		users: [
+			'alexanderbeletsky',
+			'voronianski'
+		]
+	}
+};
 ```
+
+API endpoint,
+
+```plain
+HTTP POST http://analytics.host/auth
+```
+
+```js
+var payload = {
+	token: 'GITHUB_PERSONAL_TOKEN'
+};
+```
+
+If personal token belongs to user specified in configuration file, the permissions are granted. Access token is returned to client. Access token is used as either `X-Access-Token` request header, or `?access_token=` query parameter or `token` cookie value.
+
+### Application ID
+
+Application ID is association between events and application that generates it. One server could handle as many as needed.
+
+### Posting Events
 
 ```plain
 HTTP POST http://analytics.host/api/events/:app-id
@@ -31,10 +75,7 @@ HTTP POST http://analytics.host/api/events/:app-id
 }
 ```
 
-```js
-// provide event id (optional, but suitable for fetching data)
-events({id: 'app-start', event: 'application started'});
-```
+With event id and event name,
 
 ```plain
 HTTP POST http://analytics.host/api/events/:app-id
@@ -45,10 +86,7 @@ HTTP POST http://analytics.host/api/events/:app-id
 }
 ```
 
-```js
-// provide additional payload (optional, but usefull for sophisticated analysis)
-events('application stated', {environment: process.env.NODE_ENV});
-```
+With additional event payload,
 
 ```plain
 HTTP POST http://analytics.host/api/events/:app-id
@@ -59,210 +97,79 @@ HTTP POST http://analytics.host/api/events/:app-id
 }
 ```
 
-```js
-// or ..
-events({id: 'app-start', event: 'application started'}, {environment: process.env.NODE_ENV});
+### Querying Events
 
-// provide callback (optional)
-events('application started', function (err) {
-	console.log('event posted on server');
-});
-```
-
-Scenarios for web (express.js) application:
-
-```js
-var express = require('express');
-var analytics = require('analytics');
-var app = express();
-
-// create analytics client, by providing app id
-var events = analytics('my-web-app');
-
-var eventsMiddleware = function (event, data) {
-	return function (req, res, next) {
-		events(event, data, next);
-	}
-}
-
-app.get('/login',
-	eventsMiddleware('user login request'),
-	renderLogin
-);
-
-app.post('/login',
-	checkCredentials,
-	eventsMiddleware('user logged on'),
-	redirectToApp
-);
-
-app.get('/search', function(req, res) {
-	var query = req.query['q'];
-	search.run(query, function (err, results) {
-		events('search executed', {query: query, time: results.timeTakes});
-		res.json(results.data);
-	});
-})
-```
-
-### Querying for results
-
-You can query server for data you application collected.
-
-```js
-var analytics = require('analytics');
-var events = analytics('my-web-app');
-
-// query all collected events
-events.query(function (err, results) {
-	console.log(results);
-});
-```
+All events generated by app,
 
 ```plain
 HTTP GET http://analytics.host/api/events/:app-id
 ```
 
-```js
-// query by event name
-events.query('search executed', function (err, results) {
-	console.log(results);
-});
-```
+By event name,
 
 ```plain
 HTTP GET http://analytics.host/api/events/:app-id?event=search%20executed
 ```
 
-```js
-// query by event type
-events.query({id: 'app-start'}, function (err, results) {
-	console.log(results);
-});
-```
+By event id,
 
 ```plain
 HTTP GET http://analytics.host/api/events/:app-id?id=app-start
 ```
 
-For convenience, you can request data by certain date.
-
-```js
-var analytics = require('analytics');
-var events = analytics('my-web-app');
-
-// query all collected events for today
-events.query({date: 'today'}, function (err, results) {
-	console.log(results);
-});
-```
+Today events,
 
 ```plain
 HTTP GET http://analytics.host/api/events/:app-id?date=today
 ```
 
-```js
-// query all collected events for particular day
-events.query({date: '2014-09-26'}, function (err, results) {
-	console.log(results);
-});
-```
+Or by date,
 
 ```plain
 HTTP GET http://analytics.host/api/events/:app-id?date=2014-09-26
 ```
 
-```js
-// query all collected events for particular, for event name
-events.query({event: 'search executed', date: '2014-09-26'}, function (err, results) {
-	console.log(results);
-});
-```
+Or combination,
 
 ```plain
 HTTP GET http://analytics.host/api/events/:app-id?event=search%20executed&date=today
 ```
 
-```js
-// query all collected events for particular, for event type
-events.query({id: 'app-start', date: '2014-09-26'}, function (err, results) {
-	console.log(results);
-});
-```
+### Building Reports
 
-```plain
-HTTP GET http://analytics.host/api/events/:app-id?id=app-start&date=2014-09-26
-```
-
-### Reports
-
-In order, to build dashboard application, there are number of ready to use reports.
-
-```js
-// report all events by hour
-events.report({event: 'application started', report: 'hour', date: '2013-09-29', hour: 6}, function (err, summary) {
-	console.log(summary);
-});
-```
+Events for one hour for given date,
 
 ```plain
 HTTP GET http://analytics.host/api/reports/hour/:app-id?hour=6&date=2013-09-29
 ```
 
-```js
-// report all events by day
-events.report({event: 'application started', report: 'day', date: '2013-09-29'}, function (err, summary) {
-	console.log(summary);
-});
-```
+By given date,
 
 ```plain
 HTTP GET http://analytics.host/api/reports/day/:app-id?date=2013-09-29
 ```
 
-```js
-// report all events by week
-events.report({event: 'application started', report: 'week', date: '2013-09-29'}, function (err, summary) {
-	console.log(summary);
-});
-```
+By given week,
 
 ```plain
 HTTP GET http://analytics.host/api/reports/week/:app-id?week=2013-09-29
 ```
 
-```js
-// report all events by month
-events.report({event: 'application started', report: 'month', date: '2013-09-29'}, function (err, summary) {
-	console.log(summary);
-});
-```
+By given month,
 
 ```plain
-HTTP GET http://analytics.host/api/reports/month/:app-id?week=2013-09-29
+HTTP GET http://analytics.host/api/reports/month/:app-id?month=2013-09-29
 ```
 
-```js
-// report all events by period
-events.report({event: 'application started', report: 'period', from: '2013-09-10', to: '2013-09-13'}, function (err, summary) {
-	console.log(summary);
-});
-```
+By any period,
 
 ```plain
 HTTP GET http://analytics.host/api/reports/period/:app-id?from=2013-09-10&to=2013-09-13
 ```
 
-Summary object contains totals,
-
-```js
-{
-	id: 'app-started',
-	event: 'application started',
-	total: 224
-}
-```
-
 ## License
 
 MIT
+
+
+
