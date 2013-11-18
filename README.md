@@ -4,7 +4,7 @@ Simple tool to track and analyze application events. Ideal for startups.
 
 ## Description
 
-It should be easy to start collecting application events in order to understand what's going on inside, user activity and performance issues. We solve that by logging application events to some storage and when build reports based on this data.
+It should be easy to start collecting application events in order to understand what's going on inside, users activity and performance issues. We solve that by logging application events to some storage and when build reports based on this data.
 
 There are few solutions that allows to do that. But you might decided to track on your own, fully controlling the flow and also make a solution cheap. Thats there **Seismo** will help.
 

@@ -2,7 +2,11 @@ var request = require('request');
 
 module.exports = function (app, options) {
 	if (!app) {
-		throw 'application id is required';
+		throw new Error('application id is required');
+	}
+
+	if (!options || !options.credentials) {
+		throw new Error('options or credentials are missing');
 	}
 
 	var server = (options && options.server) || 'http://localhost:3005';
