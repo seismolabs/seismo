@@ -170,6 +170,3 @@ HTTP GET http://analytics.host/api/reports/period/:app-id?from=2013-09-10&to=201
 ## License
 
 MIT
-
-
-
