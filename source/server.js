@@ -40,7 +40,11 @@ app.get('/', function (req, res) {
 app.post('/auth', function (req, res) {
 	var token = req.body.token;
 
-	request('https://api.github.com/user', { auth: { username: token, password: 'x-oauth-basic'}, json: true}, function (err, response, user) {
+	var headers = {
+		'User-Agent': 'seismo-analytics-server'
+	};
+
+	request('https://api.github.com/user', { auth: { username: token, password: 'x-oauth-basic'}, headers: headers, json: true}, function (err, response, user) {
 		if (err) {
 			return res.send(500, err);
 		}
