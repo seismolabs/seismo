@@ -12,7 +12,7 @@ var config = {
 	},
 
 	users: {
-		'alexanderbeletsky': '$2a$12$.Xp6U9nnZKVq78peM.M8ye1o2wd4H6YE40N/JMWEd7mqXidNGbEg2'
+		'seismo': '$2a$12$.Xp6U9nnZKVq78peM.M8ye1o2wd4H6YE40N/JMWEd7mqXidNGbEg2'
 	}
 };
 

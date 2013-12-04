@@ -8,7 +8,7 @@ describe('building reports', function () {
 		before(function () {
 			options = {
 				credentials: {
-					username: 'alexanderbeletsky',
+					username: 'seismo',
 					password: 'mypass'
 				}
 			};

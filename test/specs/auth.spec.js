@@ -17,7 +17,7 @@ describe('auth.spec.js', function () {
 		describe('with wrong credentials', function () {
 			beforeEach(function () {
 				credentials = {
-					username: 'alexanderbeletsky',
+					username: 'seismo',
 					password: 'wrongpass'
 				};
 			});
@@ -39,7 +39,7 @@ describe('auth.spec.js', function () {
 		describe('with right credentials', function () {
 			beforeEach(function () {
 				credentials = {
-					username: 'alexanderbeletsky',
+					username: 'seismo',
 					password: 'mypass'
 				};
 			});

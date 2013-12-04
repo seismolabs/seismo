@@ -8,7 +8,7 @@ describe('quering events', function () {
 	before(function () {
 		options = {
 			credentials: {
-				username: 'alexanderbeletsky',
+				username: 'seismo',
 				password: 'mypass'
 			}
 		};
