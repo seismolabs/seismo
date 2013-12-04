@@ -7,8 +7,8 @@ var config = require('../config');
 var moment = require('moment');
 var db = require('./db');
 var package = require('../package');
-var request = require('request');
 var crypto = require('crypto');
+var bcrypt = require('bcrypt-nodejs');
 
 var app = express();
 
@@ -38,22 +38,29 @@ app.get('/', function (req, res) {
 // Auth
 
 app.post('/auth', function (req, res) {
-	var token = req.body.token;
+	var username = req.body.username;
+	var password = req.body.password;
 
-	var headers = {
-		'User-Agent': 'seismo-analytics-server'
-	};
+	if (!username || !password) {
+		return res.send(400, {message: 'username or password missing'});
+	}
 
-	request('https://api.github.com/user', { auth: { username: token, password: 'x-oauth-basic'}, headers: headers, json: true}, function (err, response, user) {
+	var passwordHash = config.users[username];
+
+	if (!passwordHash) {
+		return res.send(401, {message: 'user ' + username + ' is not registered'});
+	}
+
+	bcrypt.compare(password, passwordHash, function (err, result) {
 		if (err) {
 			return res.send(500, err);
 		}
 
-		if (response.statusCode !== 200 || !user) {
-			return res.send(401, {message: 'github authorization failed', statusCode: response.statusCode});
+		if (!result) {
+			return res.send(401, {message: 'user ' + username + ' is not authorized due to wrong password'});
 		}
 
-		var accessToken = createToken(user.login);
+		var accessToken = createToken(username);
 
 		res.cookie('token', accessToken, {expires: new Date(Date.now() + config.tokenTtl * 60 * 1000 )});
 		res.send(200, {token: accessToken});

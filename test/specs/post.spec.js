@@ -7,7 +7,8 @@ describe('posting events', function () {
 	before(function () {
 		options = {
 			credentials: {
-				token: 'ebf6140a6314d7508a02300961636e9feffa73da'
+				username: 'alexanderbeletsky',
+				password: 'mypass'
 			}
 		};
 	});

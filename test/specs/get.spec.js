@@ -2,13 +2,14 @@ var moment = require('moment');
 var client = require('../../source/client');
 var testUtils = require('../utils');
 
-describe('quering events 2', function () {
+describe('quering events', function () {
 	var app, events, error, options, results;
 
 	before(function () {
 		options = {
 			credentials: {
-				token: 'ebf6140a6314d7508a02300961636e9feffa73da'
+				username: 'alexanderbeletsky',
+				password: 'mypass'
 			}
 		};
 	});

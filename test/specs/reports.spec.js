@@ -6,19 +6,20 @@ describe('building reports', function () {
 		var app, events, error, options, summary;
 
 		before(function () {
+			options = {
+				credentials: {
+					username: 'alexanderbeletsky',
+					password: 'mypass'
+				}
+			};
+		});
+
+		before(function () {
 			app = 'test-reporting-app-' + moment().valueOf();
 		});
 
 		before(function (done) {
 			testUtils.createReportingData(app, done);
-		});
-
-		before(function () {
-			options = {
-				credentials: {
-					token: 'ebf6140a6314d7508a02300961636e9feffa73da'
-				}
-			};
 		});
 
 		before(function () {
