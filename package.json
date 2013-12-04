@@ -21,7 +21,8 @@
     "mongojs": "~0.9.6",
     "node-logentries": "~0.1.2",
     "underscore": "~1.5.2",
-    "bcrypt-nodejs": "0.0.3"
+    "bcrypt-nodejs": "0.0.3",
+    "request": "~2.27.0"
   },
   "devDependencies": {
     "mocha": "~1.13.0",
