@@ -1,8 +1,9 @@
 var moment = require('moment');
-var client = require('../../source/client');
+var testUtils = require('../utils');
+var request = require('request');
 
 describe.only('posting events', function () {
-	var app, events, error, response, credentials;
+	var app, url, error, response, credentials, token;
 
 	before(function () {
 		url = testUtils.getRootUrl();
@@ -19,13 +20,18 @@ describe.only('posting events', function () {
 		app = 'test-posting-app-' + moment().valueOf();
 	});
 
-	/*
+	before(function (done) {
+		request.post({url: url + '/auth', body: credentials, json: true}, function (err, res) {
+			token = res.body.token;
+			done(err);
+		});
+	});
+
 	describe('with only event name', function () {
 		before(function (done) {
-			events('my first event', function (err, resp) {
+			request.post({url: url + '/api/events/' + app, headers: {'x-access-token': token}, body: {event: 'my first event'}, json: true}, function (err, resp) {
 				error = err;
-				response = resp;
-				console.log(err);
+				response = resp.body;
 				done(err);
 			});
 		});
@@ -48,9 +54,9 @@ describe.only('posting events', function () {
 
 		describe('with data', function () {
 			before(function (done) {
-				events('my first event', {environment: process.env.NODE_ENV}, function (err, resp) {
+				request.post({url: url + '/api/events/' + app, headers: {'x-access-token': token}, body: {event: 'my first event', data: {environment: process.env.NODE_ENV}}, json: true}, function (err, resp) {
 					error = err;
-					response = resp;
+					response = resp.body;
 					done(err);
 				});
 			});
@@ -67,9 +73,9 @@ describe.only('posting events', function () {
 
 	describe('with id and event name', function () {
 		before(function (done) {
-			events({id: 'second-event', event: 'my second event'}, function (err, resp) {
+			request.post({url: url + '/api/events/' + app, headers: {'x-access-token': token}, body: {event: {event: 'my second event', id: 'second-event'}}, json: true}, function (err, resp) {
 				error = err;
-				response = resp;
+				response = resp.body;
 				done(err);
 			});
 		});
@@ -92,9 +98,9 @@ describe.only('posting events', function () {
 
 		describe('with data', function () {
 			before(function (done) {
-				events({id: 'second-event', event: 'my second event'}, {environment: process.env.NODE_ENV}, function (err, resp) {
+				request.post({url: url + '/api/events/' + app, headers: {'x-access-token': token}, body: {event: 'my second event', id: 'second-event', data: {environment: process.env.NODE_ENV}}, json: true}, function (err, resp) {
 					error = err;
-					response = resp;
+					response = resp.body;
 					done(err);
 				});
 			});
@@ -112,9 +118,9 @@ describe.only('posting events', function () {
 
 	describe('when id is missing', function () {
 		before(function (done) {
-			events({event: 'my third event'}, function (err, resp) {
+			request.post({url: url + '/api/events/' + app, headers: {'x-access-token': token}, body: {event: 'my third event', data: {environment: process.env.NODE_ENV}}, json: true}, function (err, resp) {
 				error = err;
-				response = resp;
+				response = resp.body;
 				done(err);
 			});
 		});
@@ -136,4 +142,3 @@ describe.only('posting events', function () {
 		});
 	});
 });
-*/

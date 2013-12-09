@@ -359,7 +359,7 @@ function seismo(config) {
 	}
 
 	function generateIdFromName(name) {
-		return name.toLowerCase().replace(/\s/g, '-');
+		return name && name.toLowerCase().replace(/\s/g, '-');
 	}
 
 	function createToken(username) {
