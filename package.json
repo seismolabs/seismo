@@ -1,6 +1,6 @@
 {
   "name": "analytics",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Simple tool to track and analyze application events",
   "main": "source/entry.js",
   "scripts": {
