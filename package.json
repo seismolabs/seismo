@@ -2,9 +2,9 @@
   "name": "analytics",
   "version": "0.0.6",
   "description": "Simple tool to track and analyze application events",
-  "main": "source/client.js",
+  "main": "source/entry.js",
   "scripts": {
-    "test": "node runMocha",
+    "test": "node test/runMocha",
     "watch": "nodemon --watch source --watch config source/server.js"
   },
   "keywords": [
@@ -19,12 +19,11 @@
     "colors": "~0.6.2",
     "moment": "~2.2.1",
     "mongojs": "~0.9.6",
-    "node-logentries": "~0.1.2",
     "underscore": "~1.5.2",
-    "bcrypt-nodejs": "0.0.3",
-    "request": "~2.27.0"
+    "bcrypt-nodejs": "0.0.3"
   },
   "devDependencies": {
+    "request": "~2.27.0",
     "mocha": "~1.13.0",
     "chai": "~1.6.1",
     "sinon-chai": "~2.4.0",
