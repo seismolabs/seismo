@@ -1,3 +1,4 @@
+/*
 var moment = require('moment');
 var client = require('../../source/client');
 
@@ -147,3 +148,4 @@ describe('posting events', function () {
 		});
 	});
 });
+*/

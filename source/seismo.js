@@ -1,4 +1,4 @@
-module.exports = function (config) {
+function seismo(config) {
 	var express = require('express');
 	var _ = require('underscore');
 	var logger = require('./utils/logger');
@@ -9,8 +9,6 @@ module.exports = function (config) {
 	var bcrypt = require('bcrypt-nodejs');
 
 	var app = express();
-
-	config = config || require('../config');
 
 	var cors = function (req, res, next) {
 		res.header('Access-Control-Allow-Origin', '*');
@@ -435,5 +433,10 @@ module.exports = function (config) {
 	applyAuthentication(app, ['/api']);
 
 	return app;
+}
+
+module.exports = function (config) {
+	config = config || require('../config');
+	return seismo(config);
 };
 

@@ -1,3 +1,4 @@
+/*
 var moment = require('moment');
 var client = require('../../source/client');
 var testUtils = require('../utils');
@@ -124,3 +125,4 @@ describe('quering events', function () {
 		});
 	});
 });
+*/

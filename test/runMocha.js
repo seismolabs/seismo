@@ -8,5 +8,5 @@ process.exit = function (code) {
 	}, 200);
 };
 
-require('./source/server');
-require('./node_modules/mocha/bin/_mocha');
+require('../source/server');
+require('../node_modules/mocha/bin/_mocha');
