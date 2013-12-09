@@ -1,7 +1,7 @@
 var request = require('request');
 var testUtils = require('../utils');
 
-describe.only('auth.spec.js', function () {
+describe('auth.spec.js', function () {
 	var url, credentials, response, body;
 
 	beforeEach(function () {

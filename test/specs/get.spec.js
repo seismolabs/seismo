@@ -1,17 +1,18 @@
-/*
 var moment = require('moment');
-var client = require('../../source/client');
+var request = require('request');
 var testUtils = require('../utils');
 
-describe('quering events', function () {
-	var app, events, error, options, results;
+describe.only('quering events', function () {
+	var app, url, error, credentials, token, results;
 
 	before(function () {
-		options = {
-			credentials: {
-				username: 'seismo',
-				password: 'mypass'
-			}
+		url = testUtils.getRootUrl();
+	});
+
+	before(function () {
+		credentials = {
+			username: 'seismo',
+			password: 'mypass'
 		};
 	});
 
@@ -23,15 +24,19 @@ describe('quering events', function () {
 		testUtils.createQueringData(app, done);
 	});
 
-	before(function () {
-		events = client(app, options);
+
+	before(function (done) {
+		request.post({url: url + '/auth', body: credentials, json: true}, function (err, res) {
+			token = res.body.token;
+			done(err);
+		});
 	});
 
 	describe('all events', function () {
 		before(function (done) {
-			events.query(function (err, res) {
+			request.get({url: url + '/api/events/' + app, headers: {'x-access-token': token}, json: true}, function (err, res) {
 				error = err;
-				results = res;
+				results = res.body;
 				done(err);
 			});
 		});
@@ -43,9 +48,9 @@ describe('quering events', function () {
 
 	describe('by event name', function () {
 		before(function (done) {
-			events.query('application started', function (err, res) {
+			request.get({url: url + '/api/events/' + app + '?event=application started', headers: {'x-access-token': token}, json: true}, function (err, res) {
 				error = err;
-				results = res;
+				results = res.body;
 				done(err);
 			});
 		});
@@ -57,9 +62,9 @@ describe('quering events', function () {
 
 	describe('by event id', function () {
 		before(function (done) {
-			events.query({id: 'app-stopped'}, function (err, res) {
+			request.get({url: url + '/api/events/' + app + '?id=app-stopped', headers: {'x-access-token': token}, json: true}, function (err, res) {
 				error = err;
-				results = res;
+				results = res.body;
 				done(err);
 			});
 		});
@@ -71,9 +76,9 @@ describe('quering events', function () {
 
 	describe('by date', function () {
 		before(function (done) {
-			events.query({date: '2013-01-28'}, function (err, res) {
+			request.get({url: url + '/api/events/' + app + '?date=2013-01-28', headers: {'x-access-token': token}, json: true}, function (err, res) {
 				error = err;
-				results = res;
+				results = res.body;
 				done(err);
 			});
 		});
@@ -85,9 +90,9 @@ describe('quering events', function () {
 
 	describe('by today', function () {
 		before(function (done) {
-			events.query({date: 'today'}, function (err, res) {
+			request.get({url: url + '/api/events/' + app + '?date=today', headers: {'x-access-token': token}, json: true}, function (err, res) {
 				error = err;
-				results = res;
+				results = res.body;
 				done(err);
 			});
 		});
@@ -99,9 +104,9 @@ describe('quering events', function () {
 
 	describe('by name and date', function () {
 		before(function (done) {
-			events.query({event: 'application started', date: '2013-01-25'}, function (err, res) {
+			request.get({url: url + '/api/events/' + app + '?date=2013-01-25&event=application started', headers: {'x-access-token': token}, json: true}, function (err, res) {
 				error = err;
-				results = res;
+				results = res.body;
 				done(err);
 			});
 		});
@@ -113,9 +118,9 @@ describe('quering events', function () {
 
 	describe('by id and date', function () {
 		before(function (done) {
-			events.query({id: 'app-started', date: '2013-01-25'}, function (err, res) {
+			request.get({url: url + '/api/events/' + app + '?date=2013-01-25&id=app-started', headers: {'x-access-token': token}, json: true}, function (err, res) {
 				error = err;
-				results = res;
+				results = res.body;
 				done(err);
 			});
 		});
@@ -125,4 +130,3 @@ describe('quering events', function () {
 		});
 	});
 });
-*/
