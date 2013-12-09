@@ -3,7 +3,7 @@ function seismo(config) {
 	var _ = require('underscore');
 	var logger = require('./utils/logger');
 	var moment = require('moment');
-	var db = require('./db');
+	var db = require('./db')(config);
 	var package = require('../package');
 	var crypto = require('crypto');
 	var bcrypt = require('bcrypt-nodejs');

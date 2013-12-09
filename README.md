@@ -40,7 +40,8 @@ In order to run it, you have to provide configuration. Configuration is object, 
 
 ```js
 var config = {
-	authKey: 'SHARED_SECRET'				// [string] used to sign server tokens,
+	connection: 'CONNECTION_STRING',		// [string] connection string to mongo
+	authKey: 'SHARED_SECRET',				// [string] used to sign server tokens,
 	tokenTtl: 60,							// [int] token time-to-leave in minutes, default is 60 (hour)
 	users: {
 		'user': 'BCRYPTED_PASSWORD_HASH'	// [string:string] pairs of user name and bcrypted passwords (IMPORTANT, bcrypt with 12 rounds must be used)

@@ -1,17 +1,10 @@
-/**
- * Mongodb connector
- */
-var config = require('../../config');
 var mongo = require('mongojs');
 
-// specify app collections here
-var collections = ['events',];
+module.exports = function (config) {
+	var db = mongo.connect(config.connection, ['events']);
+	if (!db) {
+		throw new Error('could not connect to ' + config.connection);
+	}
 
-// get db with default collections list
-var db = mongo.connect(config.connection, collections);
-
-if (!db) {
-	throw new Error('could not connect to ' + config.connection);
-}
-
-module.exports = db;
+	return db;
+};
