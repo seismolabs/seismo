@@ -1,37 +1,25 @@
-/*
 var moment = require('moment');
 var client = require('../../source/client');
 
-describe('posting events', function () {
-	var app, events, error, response, options;
+describe.only('posting events', function () {
+	var app, events, error, response, credentials;
 
 	before(function () {
-		options = {
-			credentials: {
-				username: 'seismo',
-				password: 'mypass'
-			}
-		};
+		url = testUtils.getRootUrl();
 	});
 
-	describe('create client', function () {
-		beforeEach(function () {
-			events = client('simple-client-app', options);
-		});
-
-		it('should be initialized', function () {
-			expect(events).to.be.ok;
-		});
+	before(function () {
+		credentials = {
+			username: 'seismo',
+			password: 'mypass'
+		};
 	});
 
 	before(function () {
 		app = 'test-posting-app-' + moment().valueOf();
 	});
 
-	before(function () {
-		events = client(app, options);
-	});
-
+	/*
 	describe('with only event name', function () {
 		before(function (done) {
 			events('my first event', function (err, resp) {

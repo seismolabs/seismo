@@ -2,7 +2,7 @@ var moment = require('moment');
 var request = require('request');
 var testUtils = require('../utils');
 
-describe.only('quering events', function () {
+describe('quering events', function () {
 	var app, url, error, credentials, token, results;
 
 	before(function () {
