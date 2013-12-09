@@ -1,32 +1,37 @@
-/*
 var moment = require('moment');
-var client = require('../../source/client');
 var testUtils = require('../utils');
+var request = request('request');
 
-describe('building reports', function () {
-		var app, events, error, options, summary;
+describe.only('building reports', function () {
+	var app, events, url, error, options, summary, credentials, token;
 
-		before(function () {
-			options = {
-				credentials: {
-					username: 'seismo',
-					password: 'mypass'
-				}
-			};
+	before(function () {
+		url = testUtils.getRootUrl();
+	});
+
+	before(function () {
+		credentials = {
+			username: 'seismo',
+			password: 'mypass'
+		};
+	});
+
+	before(function () {
+		app = 'test-reporting-app-' + moment().valueOf();
+	});
+
+	before(function (done) {
+		testUtils.createReportingData(app, done);
+	});
+
+	before(function (done) {
+		request.post({url: url + '/auth', body: credentials, json: true}, function (err, res) {
+			token = res.body.token;
+			done(err);
 		});
+	});
 
-		before(function () {
-			app = 'test-reporting-app-' + moment().valueOf();
-		});
-
-		before(function (done) {
-			testUtils.createReportingData(app, done);
-		});
-
-		before(function () {
-			events = client(app, options);
-		});
-
+		/*
 		describe('report by hour', function () {
 			before(function (done) {
 				events.report({event: 'application started', report: 'hour', date: '2013-09-29', hour: 6}, function (err, sum) {
@@ -121,5 +126,5 @@ describe('building reports', function () {
 				expect(summary.total).to.equal(12);
 			});
 		});
+		*/
 });
-*/

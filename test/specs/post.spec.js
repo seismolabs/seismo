@@ -2,7 +2,7 @@ var moment = require('moment');
 var testUtils = require('../utils');
 var request = require('request');
 
-describe.only('posting events', function () {
+describe('posting events', function () {
 	var app, url, error, response, credentials, token;
 
 	before(function () {
