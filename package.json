@@ -12,6 +12,10 @@
     "events",
     "tracking"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/seismolabs/seismo.git"
+  },
   "author": "alexander.beletsky@gmail.com",
   "license": "MIT",
   "dependencies": {
