@@ -1,6 +1,6 @@
 {
   "name": "seismo",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "Simple tool to track and analyze application events",
   "main": "source/entry.js",
   "scripts": {
