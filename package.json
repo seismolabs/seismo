@@ -16,6 +16,9 @@
     "type": "git",
     "url": "git://github.com/seismolabs/seismo.git"
   },
+  "bugs": {
+    "url": "https://github.com/seismolabs/seismo/issues"
+  },
   "author": "alexander.beletsky@gmail.com",
   "license": "MIT",
   "dependencies": {
