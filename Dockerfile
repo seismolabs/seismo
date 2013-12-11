@@ -21,11 +21,9 @@ RUN curl http://nodejs.org/dist/v0.10.22/node-v0.10.22-linux-x64.tar.gz | tar xz
 RUN apt-get clean && rm -rf /var/cache/apt/archives/* /var/lib/apt/lists/*
 
 # Seismo
-RUN git clone https://github.com/seismolabs/seismo.git /home/seismo
-RUN cd /home/seismo; npm install
+RUN git clone https://github.com/seismolabs/seismo.git /seismo
+RUN cd /seismo; npm install
 ENV PORT 8080
 EXPOSE 8080
 
-WORKDIR /home/seismo
-
-ENTRYPOINT ["./bin/run-mongo.sh"]
+WORKDIR /seismo
