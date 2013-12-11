@@ -3,3 +3,5 @@ node_modules
 test
 source/server.js
 Procfile
+Dockerfile
+Vagrantfile
