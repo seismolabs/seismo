@@ -1,5 +1,5 @@
 var config = {
-	connection: 'mongodb://localhost:27017/analyticstestdb',
+	connection: 'mongodb://localhost:27017/seismotestdb',
 
 	applicationUrl: 'http://localhost:3005',
 
