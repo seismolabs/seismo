@@ -27,3 +27,4 @@ ENV PORT 8080
 EXPOSE 8080
 
 WORKDIR /seismo
+ENTRYPOINT ["./bin/run-mongo.sh"]
