@@ -1,3 +1,2 @@
-#!/bin/sh
-mongod
-node ./source/server.js
+#!/bin/bash
+mongod & node ./source/server.js
