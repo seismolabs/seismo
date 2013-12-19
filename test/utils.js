@@ -1,7 +1,8 @@
 var async = require('async');
-var db = require('../source/db');
 var moment = require('moment');
+
 var config = require('../config');
+var db = require('../source/db')(config);
 
 function getRootUrl () {
 	return config.applicationUrl;
