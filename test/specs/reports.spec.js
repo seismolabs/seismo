@@ -40,11 +40,6 @@ describe('building reports', function () {
 			});
 		});
 
-		it('should have event data', function () {
-			expect(summary.id).to.equal('app-started');
-			expect(summary.event).to.equal('application started');
-		});
-
 		it('should have total', function () {
 			expect(summary.total).to.equal(3);
 		});
@@ -57,11 +52,6 @@ describe('building reports', function () {
 				summary = res.body;
 				done(err);
 			});
-		});
-
-		it('should have event data', function () {
-			expect(summary.id).to.equal('app-started');
-			expect(summary.event).to.equal('application started');
 		});
 
 		it('should have total', function () {
@@ -78,11 +68,6 @@ describe('building reports', function () {
 			});
 		});
 
-		it('should have event data', function () {
-			expect(summary.id).to.equal('app-started');
-			expect(summary.event).to.equal('application started');
-		});
-
 		it('should have total', function () {
 			expect(summary.total).to.equal(18);
 		});
@@ -97,11 +82,6 @@ describe('building reports', function () {
 			});
 		});
 
-		it('should have event data', function () {
-			expect(summary.id).to.equal('app-started');
-			expect(summary.event).to.equal('application started');
-		});
-
 		it('should have total', function () {
 			expect(summary.total).to.equal(12);
 		});
@@ -114,11 +94,6 @@ describe('building reports', function () {
 				summary = res.body;
 				done(err);
 			});
-		});
-
-		it('should have event data', function () {
-			expect(summary.id).to.equal('app-started');
-			expect(summary.event).to.equal('application started');
 		});
 
 		it('should have total', function () {

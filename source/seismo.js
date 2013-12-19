@@ -325,20 +325,22 @@ function seismo(config) {
 
 		logger.info({message: 'prepearing report', query: query});
 
-		db.events.find(query).toArray(function (err, results) {
-			if (err || !results) {
+		db.events.find(query).count(function (err, count) {
+			if (err) {
 				return callback({message: 'failed to read events', err: err});
 			}
 
-			var total = results.length;
-			var id = total > 0 ? results[0].id : query.id;
-			var event = total > 0 ? results[0].event : query.event;
-
 			var report =  {
-				id: id,
-				event: event,
-				total: total
+				total: count
 			};
+
+			if (query.id) {
+				report.id = query.id;
+			}
+
+			if (query.event) {
+				report.event = query.event;
+			}
 
 			callback(null, report);
 		});
