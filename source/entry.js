@@ -1,6 +1,6 @@
 var http = require('http');
 
-module.exports = {
+var entry = {
 	start: function(config, callback) {
 		var seismo = require('./seismo')(config);
 		http.createServer(seismo).listen(seismo.get('port'), function (err) {
@@ -12,3 +12,5 @@ module.exports = {
 		});
 	}
 };
+
+module.exports = entry;
