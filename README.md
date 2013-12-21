@@ -25,6 +25,7 @@ The clients are also part of project. Just for now we have Express.js/Node.js cl
 ## Documentation
 
 * [Installation](/docs/installation.md)
+* [Analytics with Seismo](/docs/analytics.md)
 * [REST API](/docs/restapi.md)
 * [Deployment with Docker](/docs/docker.md)
 * [Using Dashboard](/docs/dashboard.md)
