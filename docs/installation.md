@@ -52,4 +52,4 @@ $ code src/server.js
 
 ### Docker installation
 
-TDB.
+[Deploy Seismo with Docker](/docker.md)
