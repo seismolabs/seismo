@@ -142,3 +142,11 @@ By any period,
 ```plain
 HTTP GET http://analytics.host/api/reports/period/:app-id?from=2013-09-10&to=2013-09-13
 ```
+
+## Grouping Events
+
+By attribute,
+
+```plain
+HTTP GET http://analytics.host/api/groups/:app-id?id=user-logged&attr=email&from=2013-12-10&to=2013-12-12
+```
