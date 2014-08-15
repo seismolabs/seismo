@@ -140,6 +140,22 @@ function seismo(config) {
 		}
 	});
 
+	app.get('/api/eventnames/:app', function (req, res) {
+		var app = req.params.app;
+		var query = {app: app};
+
+		db.events.distinct('event', query, function (err, results) {
+			if (err) {
+				logger.error({message: 'failed to read events', err: err});
+				return res.send(500, 'failed to read events');
+			}
+
+			logger.info('returned eventnamess for app: ' + app);
+
+			res.json(results);
+		});
+	});
+
 	// Reports
 
 	app.get('/api/reports/hour/:app', function (req, res) {
@@ -325,22 +341,20 @@ function seismo(config) {
 
 		logger.info({message: 'prepearing report', query: query});
 
-		db.events.find(query).count(function (err, count) {
-			if (err) {
+		db.events.find(query).toArray(function (err, results) {
+			if (err || !results) {
 				return callback({message: 'failed to read events', err: err});
 			}
 
+			var total = results.length;
+			var id = total > 0 ? results[0].id : query.id;
+			var event = total > 0 ? results[0].event : query.event;
+
 			var report =  {
-				total: count
+				id: id,
+				event: event,
+				total: total
 			};
-
-			if (query.id) {
-				report.id = query.id;
-			}
-
-			if (query.event) {
-				report.event = query.event;
-			}
 
 			callback(null, report);
 		});
@@ -355,6 +369,7 @@ function seismo(config) {
 		}
 
 		if (typeof event === 'object') {
+			console.log(event);
 			event.id = event.id || generateIdFromName(event.event);
 			return event;
 		}
