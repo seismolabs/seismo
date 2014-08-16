@@ -140,6 +140,26 @@ function seismo(config) {
 		}
 	});
 
+	app.get('/api/events/:field(events|ids)/:app', function (req, res) {
+		var app = req.params.app;
+		var field = req.params.field;
+		var query = {app: app};
+
+		//events -> event, ids -> id
+		field = field.substring(0, field.length - 1);
+
+		db.events.distinct(field, query, function (err, results) {
+			if (err) {
+				logger.error({message: 'failed to read events', err: err});
+				return res.send(500, 'failed to read events');
+			}
+
+			logger.info('returned ' + field + 's for app: ' + app);
+
+			res.json(results);
+		});
+	});
+
 	// Reports
 
 	app.get('/api/reports/hour/:app', function (req, res) {
