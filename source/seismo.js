@@ -140,17 +140,21 @@ function seismo(config) {
 		}
 	});
 
-	app.get('/api/eventnames/:app', function (req, res) {
+	app.get('/api/events/:field(events|ids)/:app', function (req, res) {
 		var app = req.params.app;
+		var field = req.params.field;
 		var query = {app: app};
 
-		db.events.distinct('event', query, function (err, results) {
+		//events -> event, ids -> id
+		field = field.substring(0, field.length - 1);
+
+		db.events.distinct(field, query, function (err, results) {
 			if (err) {
 				logger.error({message: 'failed to read events', err: err});
 				return res.send(500, 'failed to read events');
 			}
 
-			logger.info('returned eventnamess for app: ' + app);
+			logger.info('returned ' + field + 's for app: ' + app);
 
 			res.json(results);
 		});
